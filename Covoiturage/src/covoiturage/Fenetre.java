@@ -40,8 +40,9 @@ public abstract class Fenetre  {
         this.stage.getIcons().add(image);
         this.stage.setScene(scene);
         //menu();
+        
         this.stage.show(); 
-
+        
     }
     /*public void menu(){
         MenuBar mainMenu = new MenuBar();  
