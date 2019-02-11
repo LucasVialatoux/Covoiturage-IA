@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  */
 public class Covoiturage extends Application {
     public ArrayList<Utilisateur> utils;
-    @Override
+
     public void start(Stage primaryStage) throws FileNotFoundException, IOException {
         initUtil();
         new PageAcceuil();

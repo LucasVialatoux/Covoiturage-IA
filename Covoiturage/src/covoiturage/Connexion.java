@@ -22,7 +22,7 @@ public class Connexion implements EventHandler<ActionEvent>{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Connexion");
                 alert.setHeaderText("ERREUR!");
-                alert.setContentText("Probleme d'identifiant");
+                alert.setContentText("Problème d'identifiant");
                 alert.showAndWait();   
      }
       public void boiteDeDialogueI(String msg){ 

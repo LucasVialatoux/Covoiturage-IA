@@ -1,6 +1,9 @@
 package covoiturage;
 import javafx.geometry.Insets;
 import java.io.File;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,12 +22,15 @@ import javafx.stage.Stage;
  *
  * @author p1606751
  */
-public class PageAcceuil {
+public class PageAcceuil{
     
     public TextField user;
     public PasswordField mdp;
     public Stage stage;
     public Pane root;
+    public Platform platform;
+    public boolean userEmpty, mdpEmpty;
+    
     
 
     public PageAcceuil(){
@@ -43,10 +49,10 @@ public class PageAcceuil {
         t1.setFill(Color.RED);
         user = new TextField ();
         mdp = new PasswordField();
-        Button btn = new Button();
-        btn.setText("Connexion");
-        Button btn2 = new Button();
-        btn2.setText("Pas encore inscrit ?");
+        Button btnConnexion = new Button();
+        btnConnexion.setText("Connexion");
+        Button btnInscription = new Button();
+        btnInscription.setText("Pas encore inscrit ?");
         String imageURI2 = new File("fond.png").toURI().toString(); 
         Image image2 = new Image(imageURI2);
         ImageView imageView = new ImageView(image2); 
@@ -61,12 +67,35 @@ public class PageAcceuil {
         grid.add(user, 46, 60);
         grid.add(t1, 45, 65);
         grid.add(mdp, 46, 65);
-        grid.add(btn, 46, 70);
-        grid.add(btn2, 46, 75);
+        grid.add(btnConnexion, 46, 70);
+        grid.add(btnInscription, 46, 75);
         root.getChildren().add(grid);
         Scene scene = new Scene(root, 1200, 675);
-        stage.setTitle("covoiturage"); 
+        stage.setTitle("Covoiturage"); 
         stage.setScene(scene);
         stage.show();
+        
+        //Listener sur Textfields utilisateur + mdp
+        btnConnexion.setDisable(true);
+        userEmpty=true;
+        mdpEmpty=true;
+        //On ajoute les listeners
+        user.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            userEmpty = newValue.trim().isEmpty();
+            //On appelle la fonction pour rendre visible si les 2 champs sont remplis
+            disableConnexion(userEmpty,mdpEmpty,btnConnexion);
+        });
+        mdp.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            mdpEmpty = newValue.trim().isEmpty();
+            disableConnexion(userEmpty,mdpEmpty,btnConnexion);
+        });
+    }
+    //Fonction qui test si les 2 champs sont remplis
+    public void disableConnexion(boolean userEmpty, boolean mdpEmpty, Button btnConnexion){
+        if(userEmpty==false && mdpEmpty==false){
+            btnConnexion.setDisable(false);
+        } else {
+            btnConnexion.setDisable(true);
+        }
     }
 }
