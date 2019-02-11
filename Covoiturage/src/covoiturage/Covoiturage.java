@@ -21,7 +21,8 @@ public class Covoiturage extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        new PageAcceuil();
+        //new PageAcceuil();
+        new PageUtilisateur();
     }
 
     /**

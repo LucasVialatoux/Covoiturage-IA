@@ -4,7 +4,6 @@ import java.io.File;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,7 +22,7 @@ import javafx.stage.Stage;
  *
  * @author p1606751
  */
-public class PageAcceuil {
+public class PageAcceuil{
     
     public TextField user;
     public PasswordField mdp;
@@ -73,7 +72,7 @@ public class PageAcceuil {
         grid.add(btnInscription, 46, 75);
         root.getChildren().add(grid);
         Scene scene = new Scene(root, 1200, 675);
-        stage.setTitle("covoiturage"); 
+        stage.setTitle("Covoiturage"); 
         stage.setScene(scene);
         stage.show();
         

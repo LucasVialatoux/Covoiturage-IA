@@ -20,7 +20,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 /**
  *
  * @author p1606751
@@ -35,12 +34,12 @@ public abstract class Fenetre  {
         this.root = new BorderPane(); 
         Scene scene = new Scene(this.root, 1200, 675);
         this.stage.setTitle("Covoiturage");
-        String imageURI = new File("icone.png").toURI().toString(); 
+        String imageURI = new File("icone.jpg").toURI().toString(); 
         Image image = new Image(imageURI);
         this.stage.getIcons().add(image);
         this.stage.setScene(scene);
+        root.setStyle("-fx-background-color: #efefef;");
         //menu();
-        
         this.stage.show(); 
         
     }
