@@ -27,12 +27,11 @@ public class PageAcceuil {
     public Pane root;
     
 
-    public PageAcceuil() {
+    public PageAcceuil(){
         this.stage=new Stage();
         this.root = new Pane();
         String imageURI = new File("icone.jpg").toURI().toString(); 
         Image image = new Image(imageURI);
-        System.out.println(image);
         this.stage.getIcons().add(image);
         Text t = new Text();
         t.setText("Identifiants   : ");
@@ -53,7 +52,7 @@ public class PageAcceuil {
         ImageView imageView = new ImageView(image2); 
         imageView.setFitWidth(1200); 
         imageView.setFitHeight(675); 
-        root.getChildren().setAll(imageView); 
+        root.getChildren().setAll(imageView);
         GridPane grid = new GridPane();
         grid.setVgap(4);
         grid.setHgap(10);
