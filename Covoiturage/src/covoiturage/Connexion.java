@@ -53,12 +53,17 @@ public class Connexion implements EventHandler<ActionEvent>{
                 util=x;
             }
         }
-        if(util.mdp.equals(page.mdp.getText())){
-            new AccueilUtil(util);
-            page.stage.close();
-        }else{
+        if(util==null){
             boiteDeDialogueE();
+        }else{
+            if(util.mdp.equals(page.mdp.getText())){
+                new AccueilUtil(util);
+                page.stage.close();
+            }else{
+                boiteDeDialogueE();
+            }
         }
+        
     }
     public void initUtil() throws FileNotFoundException{
             this.utils=new ArrayList<Utilisateur>();
