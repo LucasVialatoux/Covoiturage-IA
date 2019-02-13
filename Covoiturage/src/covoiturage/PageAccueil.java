@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  *
  * @author p1606751
  */
-public class PageAcceuil{
+public class PageAccueil{
     
     public TextField user;
     public PasswordField mdp;
@@ -33,7 +33,7 @@ public class PageAcceuil{
     
     
 
-    public PageAcceuil(){
+    public PageAccueil(){
         this.stage=new Stage();
         this.root = new Pane();
         String imageURI = new File("icone.jpg").toURI().toString(); 
@@ -51,6 +51,7 @@ public class PageAcceuil{
         mdp = new PasswordField();
         Button btnConnexion = new Button();
         btnConnexion.setText("Connexion");
+        btnConnexion.setOnAction(new Connexion(this));
         Button btnInscription = new Button();
         btnInscription.setText("Pas encore inscrit ?");
         String imageURI2 = new File("fond.png").toURI().toString(); 
