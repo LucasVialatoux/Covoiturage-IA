@@ -1,5 +1,6 @@
 package covoiturage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,20 +19,32 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 /**
  *
  * @author lucas
  */
-public class PageUtilisateur extends Fenetre{
+public class PageUtilisateur{
     public TextField fieldLastName;
     public TextField fieldFirstName;
     public TextField fieldEmail;
     public PasswordField fieldPassword;
+    public Stage stage;
+    public Pane root;
     
     public PageUtilisateur(){
-        super();
-        
+        this.stage=new Stage();
+        this.root = new Pane(); 
+        Scene scene = new Scene(this.root, 1200, 675);
+        this.stage.setTitle("Covoiturage");
+        String imageURI = new File("icone.jpg").toURI().toString(); 
+        Image image = new Image(imageURI);
+        this.stage.getIcons().add(image);
+        this.stage.setScene(scene);
+        root.setStyle("-fx-background-color: #efefef;");        
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(20));
         Label labelTitle = new Label("Veuillez entrer les informations suivantes vous concernant");
@@ -98,6 +111,7 @@ public class PageUtilisateur extends Fenetre{
        System.out.println("ROOT"+root.getChildren());
 
        root.getChildren().add(grid);
+       this.stage.show(); 
        
     }
     public boolean Creation() throws IOException{
