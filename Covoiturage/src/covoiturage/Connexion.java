@@ -70,8 +70,11 @@ public class Connexion implements EventHandler<ActionEvent>{
             Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
             while (scanner.hasNextLine()) {
                 String util=scanner.nextLine();
-                String[] parts = util.split(" ");
-                utils.add(new Utilisateur(parts[0],parts[1],parts[2],Boolean.parseBoolean(parts[3]),parts[4]));
+                String[] parts = util.split(";");
+                for(String x:parts){
+                    String[] parts2 = x.split(" ");
+                    utils.add(new Utilisateur(Integer.parseInt(parts2[0]),parts2[1],parts2[2],parts2[3],Boolean.parseBoolean(parts2[4]),parts2[5]));
+                }
             }
         }
 }
