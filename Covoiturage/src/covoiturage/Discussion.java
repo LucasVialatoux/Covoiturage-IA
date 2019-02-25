@@ -16,11 +16,11 @@ import java.util.Scanner;
  *
  * @author user
  */
-public class Discussions {
+public class Discussion {
     public Utilisateur user1;
     public Utilisateur user2;
     
-    public Discussions(Utilisateur user1,Utilisateur user2){
+    public Discussion(Utilisateur user1,Utilisateur user2){
        this.user1=user1;
        this.user2=user2;
     }
