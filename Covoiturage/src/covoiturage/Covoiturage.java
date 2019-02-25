@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 public class Covoiturage extends Application {
 
     public void start(Stage primaryStage){
-        new PageUtilisateur();
+        new PageAccueil();
     }
     /**
      * @param args the command line arguments

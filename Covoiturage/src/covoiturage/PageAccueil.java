@@ -1,9 +1,14 @@
 package covoiturage;
 import javafx.geometry.Insets;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -70,6 +75,13 @@ public class PageAccueil{
         grid.add(mdp, 46, 65);
         grid.add(btnConnexion, 46, 70);
         grid.add(btnInscription, 46, 75);
+        btnInscription.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent t) {
+                                    stage.close();
+                                    new PageUtilisateur();
+                                }
+                            });
         root.getChildren().add(grid);
         Scene scene = new Scene(root, 1200, 675);
         stage.setTitle("Covoiturage"); 
