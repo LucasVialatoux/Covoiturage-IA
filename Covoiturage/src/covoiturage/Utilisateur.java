@@ -36,7 +36,7 @@ public class Utilisateur {
     }
     @Override
     public String toString(){
-        return "id:"+this.id+"nom:"+this.nom+" prenom:"+this.prenom+" mdp:"+this.mdp+" estAdmin;"+this.estAdmin+" email:"+this.email;
+        return "id:"+this.id+" nom:"+this.nom+" prenom:"+this.prenom+" mdp:"+this.mdp+" estAdmin"+this.estAdmin+" email:"+this.email;
     }
     
 }

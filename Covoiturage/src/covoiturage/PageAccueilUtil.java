@@ -9,9 +9,8 @@ package covoiturage;
  *
  * @author antoine dulhoste
  */
-public class AccueilUtil extends Fenetre {
-    public Utilisateur util;
-    public AccueilUtil(Utilisateur util){
-        this.util=util;
+public class PageAccueilUtil extends Fenetre {
+    public PageAccueilUtil(Utilisateur util){
+        super(util);
     }
 }

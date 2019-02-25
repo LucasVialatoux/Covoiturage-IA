@@ -57,7 +57,7 @@ public class Connexion implements EventHandler<ActionEvent>{
             boiteDeDialogueE();
         }else{
             if(util.mdp.equals(page.mdp.getText())){
-                new AccueilUtil(util);
+                new PageAccueilUtil(util);
                 page.stage.close();
             }else{
                 boiteDeDialogueE();
