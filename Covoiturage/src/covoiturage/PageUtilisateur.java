@@ -21,6 +21,7 @@ import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 /**
@@ -119,25 +120,49 @@ public class PageUtilisateur{
         String firstName = fieldFirstName.getText();
         String email = fieldEmail.getText();
         String pwd = fieldPassword.getText();
+        if (lastName.isEmpty() || firstName.isEmpty()
+                || email.isEmpty() || pwd.isEmpty() ){
+            boiteDeDialogueE();
+            return false;
+        } else {
+            Utilisateur u = new Utilisateur(lastID(),lastName,firstName,pwd,false,email);
+            u.creerUtil();
+            boiteDeDialogueI();
+            return true; 
+        }
 
-        Utilisateur u = new Utilisateur(lastID(),lastName,firstName,pwd,false,email);
-        u.creerUtil(); 
-        return true;
+        
         
         
     }
     
     public int lastID() throws FileNotFoundException{
-            int lastID=0;
-            Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
-            while (scanner.hasNextLine()) {
-                String util=scanner.nextLine();
-                String[] parts = util.split(";");
-                for(String x:parts){
-                    String[] parts2 = x.split(" ");
-                    lastID =Integer.parseInt(parts2[0]); 
-                }
+        int lastID=0;
+        Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
+        while (scanner.hasNextLine()) {
+            String util=scanner.nextLine();
+            String[] parts = util.split(";");
+            for(String x:parts){
+                String[] parts2 = x.split(" ");
+                lastID =Integer.parseInt(parts2[0]); 
             }
-            return lastID+1;
         }
+        return lastID+1;
+    }
+    
+    public void boiteDeDialogueE(){ 
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Inscription");
+        alert.setHeaderText("ERREUR!");
+        alert.setContentText("Information manquantes !");
+        alert.showAndWait();   
+    }
+    
+    public void boiteDeDialogueI(){ 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Inscription");
+        alert.setHeaderText("Inscription validée");
+        alert.setContentText("Merci pour votre inscription !");
+        alert.showAndWait();   
+    }
 }
