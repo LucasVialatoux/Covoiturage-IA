@@ -27,12 +27,12 @@ import javafx.stage.Stage;
 public abstract class Fenetre  {
     
     public Stage stage;
-    public BorderPane root;
+    public Pane root;
     
     public Fenetre() {
         this.stage=new Stage();
-        this.root = new BorderPane(); 
-        Scene scene = new Scene(this.root, 1200, 675);
+        this.root = new Pane(); 
+        Scene scene = new Scene(root, 1200, 675);
         this.stage.setTitle("Covoiturage");
         String imageURI = new File("icone.jpg").toURI().toString(); 
         Image image = new Image(imageURI);

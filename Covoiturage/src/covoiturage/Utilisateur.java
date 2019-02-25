@@ -17,7 +17,7 @@ public class Utilisateur {
     public String nom;
     public String prenom;
     public String mdp;
-    public boolean estAdmin; //0:utilisteur 1:admin
+    public boolean estAdmin; //false:utilisteur true:admin
     public String email;
     
     public Utilisateur(int id,String nom,String prenom,String mdp,boolean estAdmin,String email){
@@ -28,6 +28,7 @@ public class Utilisateur {
         this.prenom=prenom;
         this.mdp=mdp;
     }
+    
     public void creerUtil() throws IOException{
         String ajout=this.id+" "+this.nom+" "+this.prenom+" "+this.mdp+" "+this.estAdmin+" "+this.email+";";
         FileWriter fw = new FileWriter("utilisateur.txt",true);
