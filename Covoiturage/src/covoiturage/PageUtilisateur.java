@@ -109,7 +109,6 @@ public class PageUtilisateur{
        // Horizontal alignment for Login button.
        GridPane.setHalignment(createButton, HPos.RIGHT);
        grid.add(createButton, 1, 5);
-       System.out.println("ROOT"+root.getChildren());
 
        root.getChildren().add(grid);
        this.stage.show(); 

@@ -87,7 +87,6 @@ public class PageAccueil{
         stage.setTitle("Covoiturage"); 
         stage.setScene(scene);
         stage.show();
-        System.out.println("ROOT"+root.getChildren());
         //Listener sur Textfields utilisateur + mdp
         btnConnexion.setDisable(true);
         userEmpty=true;

@@ -20,6 +20,8 @@ import java.util.Scanner;
 public class Discussion {
     public Utilisateur user1;
     public Utilisateur user2;
+    public int id1;
+    public int id2;
     public boolean estFini;
     public int prix;
     public String voyage;
@@ -27,6 +29,8 @@ public class Discussion {
     public Discussion(Utilisateur user1,Utilisateur user2){
         this.user1=user1;
         this.user2=user2;
+        this.id1=user1.id;
+        this.id2=user2.id;
         this.estFini=false;
     }
    
