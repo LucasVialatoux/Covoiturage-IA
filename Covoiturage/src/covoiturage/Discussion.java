@@ -24,17 +24,19 @@ public class Discussion {
     public boolean estFini;
     public int prix;
     public String voyage;
+    public String date;
             
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage){
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
         this.user1=user1;
         this.user2=user2;
         this.estFini=false;
         this.prix=prix;
         this.voyage=voyage;
+        this.date=date;
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.prix+"|"+this.voyage+"|";
+        String ajout=this.prix+"|"+this.voyage+"|"+this.date+"|";
         for(String s : messages){
             ajout+=s+";";
         }
