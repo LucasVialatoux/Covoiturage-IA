@@ -9,8 +9,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -24,10 +25,12 @@ public class Discussion {
     public int prix;
     public String voyage;
             
-    public Discussion(Utilisateur user1,Utilisateur user2){
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage){
         this.user1=user1;
         this.user2=user2;
         this.estFini=false;
+        this.prix=prix;
+        this.voyage=voyage;
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
@@ -41,7 +44,8 @@ public class Discussion {
         file.delete();
         
         if(this.estFini){ 
-            path = this.user1.id+"-"+this.user2.id+LocalDateTime.now()+".txt";
+            String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+            path = this.user1.id+"-"+this.user2.id+"_"+dateTime+".txt";
         }
         
         FileWriter fw = new FileWriter(path,true);
