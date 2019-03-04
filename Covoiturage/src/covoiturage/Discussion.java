@@ -20,7 +20,6 @@ import java.util.Scanner;
 public class Discussion {
     public Utilisateur user1;
     public Utilisateur user2;
-    public boolean estFini;
     public int prix;
     public String voyage;
     public String date;
@@ -28,7 +27,6 @@ public class Discussion {
     public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
         this.user1=user1;
         this.user2=user2;
-        this.estFini=false;
         this.prix=prix;
         this.voyage=voyage;
         this.date=date;
@@ -39,15 +37,9 @@ public class Discussion {
         for(String s : messages){
             ajout+=s+";\n";
         }
-        
-        String path= this.user1.id+"-"+this.user2.id+".txt";
-        File file = new File(path);
-        file.delete();
-        
-        if(this.estFini){ 
-            String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-            path = this.user1.id+"-"+this.user2.id+"_"+dateTime+".txt";
-        }
+ 
+        String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+        String path = "messages/"+this.user1.id+"-"+this.user2.id+"_"+dateTime+".txt";
         
         FileWriter fw = new FileWriter(path,true);
         fw.write(ajout);
@@ -55,7 +47,7 @@ public class Discussion {
     }
     
     public ArrayList<String> recupererConversation() throws IOException{
-        String path = this.user1.id+"-"+this.user2.id+".txt";
+        String path = "messages/"+this.user1.id+"-"+this.user2.id+".txt";
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) { 
             ArrayList<String> str=new ArrayList();
@@ -71,8 +63,4 @@ public class Discussion {
         }
         return null;
     }   
-    
-    public void finirDiscussion(){
-        this.estFini=true;
-    }
 }
