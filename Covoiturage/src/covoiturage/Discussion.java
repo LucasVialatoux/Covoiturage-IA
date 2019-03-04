@@ -6,7 +6,6 @@
 package covoiturage;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,9 +35,9 @@ public class Discussion {
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.prix+"|"+this.voyage+"|"+this.date+"|";
+        String ajout=this.prix+"|"+this.voyage+"|"+this.date+"|\n";
         for(String s : messages){
-            ajout+=s+";";
+            ajout+=s+";\n";
         }
         
         String path= this.user1.id+"-"+this.user2.id+".txt";
@@ -55,14 +54,18 @@ public class Discussion {
         fw.close();
     }
     
-    public String recupererConversation() throws IOException{
+    public ArrayList<String> recupererConversation() throws IOException{
         String path = this.user1.id+"-"+this.user2.id+".txt";
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) { 
-            String str="";
+            ArrayList<String> str=new ArrayList();
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()){
-                str += sc.nextLine();                     
+                String temp = sc.nextLine();
+                if(!"|".equals(temp.substring(temp.length() - 1))){
+                    temp=temp.substring(0,temp.length() - 1);
+                    str.add(temp);
+                }                    
             }
             return str;
         }
