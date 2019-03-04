@@ -59,8 +59,12 @@ public class Discussion {
         String path = this.user1.id+"-"+this.user2.id+".txt";
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) { 
-            Scanner scanner = new Scanner(new FileReader(path));
-            return scanner.toString();
+            String str="";
+            Scanner sc = new Scanner(f);
+            while(sc.hasNextLine()){
+                str += sc.nextLine();                     
+            }
+            return str;
         }
         return null;
     }   
