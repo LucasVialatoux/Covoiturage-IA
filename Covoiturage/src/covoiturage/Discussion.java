@@ -60,13 +60,19 @@ public class Discussion {
     private int prix;
     private String voyage;
     private String date;
+    private String voyageur;
             
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,int i){
         this.user1=user1;
         this.user2=user2;
         this.prix=prix;
         this.voyage=voyage;
         this.date=date;
+        if(i==1){
+            this.voyageur=this.user1.nom;
+        }else{
+            this.voyageur=this.user2.nom;
+        }
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
@@ -96,7 +102,7 @@ public class Discussion {
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()){
                 String temp = sc.nextLine();
-                if(!"|".equals(temp.substring(temp.length() - 1))){
+                if(!"#".equals(temp.substring(temp.length() - 1))){
                     temp=temp.substring(0,temp.length() - 1);
                     str.add(temp);
                 }                    
@@ -175,5 +181,12 @@ public class Discussion {
         } else {
             return rndNumber;
         }
+    }
+
+    /**
+     * @return the voyageur
+     */
+    public String getVoyageur() {
+        return voyageur;
     }
 }

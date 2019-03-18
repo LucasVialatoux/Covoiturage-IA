@@ -103,7 +103,7 @@ public abstract class Fenetre  {
                     break;
                 case 4:
                     Utilisateur util2 = new Utilisateur(66,"d","d","d",false,"d.d");
-                    Discussion disc = new Discussion(this.util,util2,50,"Paris Lyon","2010-10-10");
+                    Discussion disc = new Discussion(this.util,util2,50,"Paris Lyon","2010-10-10",1);
                     {
                         try {
                             disc.conversation();
