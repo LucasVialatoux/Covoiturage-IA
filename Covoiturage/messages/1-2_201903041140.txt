@@ -1,2 +1,0 @@
-10|Paris-Lyon|2010|
-test;

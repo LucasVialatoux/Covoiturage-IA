@@ -12,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -89,8 +91,28 @@ public abstract class Fenetre  {
                new Aide(this.util);
             }
             else if(this.page==3){
-               new PageAccueilUtil(this.util);
+                try {
+                    new PageAccueilUtil(this.util);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }  
     }
+    public Utilisateur trouverUtil(String s) throws FileNotFoundException{
+            Utilisateur utilisateur=null;
+            Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
+            while (scanner.hasNextLine()) {
+                String utili=scanner.nextLine();
+                String[] parts = utili.split(";");
+                for(String x:parts){
+                    String[] parts2 = x.split(" ");
+                    if(parts2[0].equals(s)){
+                        utilisateur=new Utilisateur(Integer.parseInt(parts2[0]),parts2[1],parts2[2],parts2[3],Boolean.parseBoolean(parts2[4]),parts2[5]);
+                    }
+                    
+                }
+            }
+            return utilisateur;
+        }
 }

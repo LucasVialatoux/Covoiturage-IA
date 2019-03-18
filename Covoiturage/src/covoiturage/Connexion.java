@@ -57,7 +57,11 @@ public class Connexion implements EventHandler<ActionEvent>{
             boiteDeDialogueE();
         }else{
             if(util.mdp.equals(page.mdp.getText())){
-                new PageAccueilUtil(util);
+                try {
+                    new PageAccueilUtil(util);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 page.stage.close();
             }else{
                 boiteDeDialogueE();

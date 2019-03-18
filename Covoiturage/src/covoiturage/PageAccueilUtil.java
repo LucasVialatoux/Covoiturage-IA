@@ -6,9 +6,12 @@
 package covoiturage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,38 +30,46 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author antoine dulhoste
  */
 public class PageAccueilUtil extends Fenetre {
-    public PageAccueilUtil(Utilisateur util){
+    
+    public PageAccueilUtil(Utilisateur util) throws FileNotFoundException{
         super(util);
         TableView<Discussion> table = new TableView();
         ObservableList<Discussion>data =disUtil();
-        //data.add(new Discussion(rs.getInt(1),rs.getString(11),rs.getDate(7),n1,n2,rs.getString(14),rs.getInt(8),rs.getTime(9)));
-        table.setEditable(true);
         TableColumn date = new TableColumn("Date");
-        date.setCellValueFactory(new PropertyValueFactory<Discussion, String>("Date"));
+        date.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
         TableColumn voyage = new TableColumn("Voyage");
         voyage.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
-        TableColumn voyageur = new TableColumn("Voyageur");
-        voyageur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyageur"));
-        TableColumn fini = new TableColumn("Terminé");
-        fini.setCellValueFactory(new PropertyValueFactory<Discussion, String>("Termine"));
-        table.getColumns().addAll(date,voyage,voyageur,fini);
+        //TableColumn voyageur = new TableColumn("Voyageur");
+        //voyageur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyageur"));
+        table.getColumns().addAll(date,voyage);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setCursor(Cursor.CLOSED_HAND);
+        table.getItems().setAll(data);
         root.setCenter(table);
         }
-    public ObservableList<Discussion> disUtil(){
+    
+    public ObservableList<Discussion> disUtil() throws FileNotFoundException{
         ObservableList<Discussion> data =FXCollections.observableArrayList();
-        listerRepertoire(new File("messages"));
+        String [] listeDiscussion;
+        listeDiscussion=listerRepertoire(new File("messages"));
+        for (String s:listeDiscussion){
+            String[] parts = s.split("-");
+            if(parts[0].equals(Integer.toString(this.util.id)) || parts[1].equals(Integer.toString(this.util.id)) ){
+                Scanner scanner = new Scanner(new FileReader("messages\\"+s));
+                String scan=scanner.nextLine();
+                String[] discussion = scan.split("#");
+                Utilisateur util1=this.trouverUtil(parts[0]);
+                Utilisateur util2=this.trouverUtil(parts[1]);
+                Discussion dis=new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2]);
+                data.add(dis);
+            }
+        }
         return  data;
     }
-    public void listerRepertoire(File repertoire){ 
-        String [] listefichiers; 
-        int i; 
+    
+    public String[] listerRepertoire(File repertoire){ 
+        String [] listefichiers;
         listefichiers=repertoire.list(); 
-        for(i=0;i<listefichiers.length;i++){ 
-        if(listefichiers[i].endsWith(".txt")==true){ 
-            System.out.println(listefichiers[i].replaceFirst(".txt","")); 
-        } 
-    } 
+        return listefichiers;
 }
 }

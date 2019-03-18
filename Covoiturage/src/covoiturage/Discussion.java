@@ -18,32 +18,63 @@ import java.util.Scanner;
  * @author user
  */
 public class Discussion {
-    public Utilisateur user1;
-    public Utilisateur user2;
-    public int id1;
-    public int id2;
-    public int prix;
-    public String voyage;
-    public String date;
+
+    /**
+     * @return the user1
+     */
+    public Utilisateur getUser1() {
+        return user1;
+    }
+
+    /**
+     * @return the user2
+     */
+    public Utilisateur getUser2() {
+        return user2;
+    }
+
+    /**
+     * @return the prix
+     */
+    public int getPrix() {
+        return prix;
+    }
+
+    /**
+     * @return the voyage
+     */
+    public String getVoyage() {
+        return voyage;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+    private Utilisateur user1;
+    private Utilisateur user2;
+    private int prix;
+    private String voyage;
+    private String date;
             
     public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
         this.user1=user1;
         this.user2=user2;
-        this.id1=user1.id;
-        this.id2=user2.id;
         this.prix=prix;
         this.voyage=voyage;
         this.date=date;
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.prix+"|"+this.voyage+"|"+this.date+"|\n";
+        String ajout=this.getPrix()+"#"+this.getVoyage()+"#"+this.getDate()+"#\n";
         for(String s : messages){
             ajout+=s+";\n";
         }
  
         String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-        String path = "messages/"+this.user1.id+"-"+this.user2.id+"_"+dateTime+".txt";
+        String path = "messages/"+this.getUser1().id+"-"+this.getUser2().id+"-"+dateTime+".txt";
         
         FileWriter fw = new FileWriter(path,true);
         fw.write(ajout);
@@ -51,7 +82,7 @@ public class Discussion {
     }
     
     public ArrayList<String> recupererConversation() throws IOException{
-        String path = "messages/"+this.user1.id+"-"+this.user2.id+".txt";
+        String path = "messages/"+this.getUser1().id+"-"+this.getUser2().id+".txt";
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) { 
             ArrayList<String> str=new ArrayList();
@@ -66,5 +97,10 @@ public class Discussion {
             return str;
         }
         return null;
-    }   
+    }
+    
+    @Override
+    public String toString(){
+        return this.getPrix()+" "+this.getVoyage()+" "+this.getDate();
+    }
 }
