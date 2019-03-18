@@ -5,11 +5,10 @@
  */
 package covoiturage;
 
-
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -19,12 +18,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 /**
@@ -69,33 +64,66 @@ public abstract class Fenetre  {
         accueil.setOnAction(new ChangeMenu(this.util,3));
         MenuItem PropV = new MenuItem("Proposer un voyage");
         MenuItem cherV = new MenuItem("Chercher un voyage");
-        mesVoyages.getItems().setAll(accueil,PropV,cherV);
+        cherV.setOnAction(new ChangeMenu(this.util,5));
+        MenuItem voirDisc = new MenuItem("Voir discussions");
+        voirDisc.setOnAction(new ChangeMenu(this.util,4));
+        mesVoyages.getItems().setAll(accueil,PropV,cherV,voirDisc);
         mainMenu.getMenus().addAll(mesVoyages,application, aide);
         mainMenu.setUseSystemMenuBar(true);
         this.root.setTop(mainMenu);  
     }
+    
     public class ChangeMenu implements EventHandler<ActionEvent>{
-    public Utilisateur util;
-    public int page;
-    public ChangeMenu(Utilisateur u,int page){
-        this.util=u;
-        this.page=page;
-    }
-    @Override
-    public void handle(ActionEvent event) {
-            stage.close();
-            if(this.page==1){
-               new PageAccueil();
-            }
-            else if(this.page==2){
-               new Aide(this.util);
-            }
-            else if(this.page==3){
-                try {
-                    new PageAccueilUtil(this.util);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+        public Utilisateur util;
+        public int page;
+        
+        public ChangeMenu(Utilisateur u,int page){
+            this.util=u;
+            this.page=page;
+        }
+        
+        @Override
+        public void handle(ActionEvent event) {
+                stage.close();
+            switch (this.page) {
+                case 1:
+                    PageAccueil pageAccueil = new PageAccueil();
+                    break;
+                case 2:
+                    Aide aide = new Aide(this.util);
+                    break;
+                case 3:
+                {
+                    try {
+                        PageAccueilUtil pageAccueilUtil = new PageAccueilUtil(this.util);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                    break;
+                case 4:
+                    Utilisateur util2 = new Utilisateur(66,"d","d","d",false,"d.d");
+                    Discussion disc = new Discussion(this.util,util2,50,"Paris Lyon","2010-10-10");
+                    {
+                        try {
+                            disc.conversation();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    {
+                        try {
+                            PageMessage pagemessage = new PageMessage(this.util,disc);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                case 5:
+                    PageRecherche recherche =new PageRecherche(this.util);
+                    break;
+                default:
+                    break;
             }
         }  
     }

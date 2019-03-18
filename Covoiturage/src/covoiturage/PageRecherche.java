@@ -5,10 +5,16 @@
  */
 package covoiturage;
 
+import java.time.LocalDate;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -18,7 +24,7 @@ import javafx.scene.layout.GridPane;
  * @author lucas
  */
 public class PageRecherche extends Fenetre{
-    public TextField Date;
+    public DatePicker Date;
     public TextField Depart;
     public TextField Arrivee;
     
@@ -29,14 +35,14 @@ public class PageRecherche extends Fenetre{
         Label labelTitle = new Label("Veuillez entrer les informations ci-dessous pour effectuer une recherche");
         grid.add(labelTitle, 0, 0, 2, 1);
         
-        Label labelDepart = new Label("Départ : ");
+        Label labelDepart = new Label("Ville de départ : ");
         Depart = new TextField();
         
-        Label labelArrivee = new Label("Arrivée : ");
+        Label labelArrivee = new Label("Ville d'arrivée : ");
         Arrivee = new TextField();
         
         Label labelDate = new Label("Date : ");
-        Date = new TextField();
+        Date = new DatePicker();
         
         Button searchButton = new Button("Chercher un trajet");
         
@@ -65,6 +71,12 @@ public class PageRecherche extends Fenetre{
         GridPane.setHalignment(searchButton, HPos.RIGHT);
         grid.add(searchButton, 1, 4);
 
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent t) {
+                                    recherche();
+                                }
+                            });
         
         grid.setVgap(4);
         grid.setHgap(10);
@@ -72,6 +84,51 @@ public class PageRecherche extends Fenetre{
         root.setCenter(grid);
     }
 
+    public void recherche(){
+        String depart = Depart.getText();
+        String arrivee = Arrivee.getText();
+        LocalDate date = Date.getValue();
+        
+        System.out.println("depart : "+depart);
+        System.out.println("arrivee : "+arrivee);
+        System.out.println("date : "+date);
+        if (depart.isEmpty() && arrivee.isEmpty() && date == null){
+            boiteDialogueError(1);
+        } else if (depart.isEmpty() && arrivee.isEmpty()){
+            boiteDialogueError(2);
+        } else if (date == null){
+            boiteDialogueError(3);
+        }
+        
+        //A FAIRE :
+        //AJOUTER TEST FORMAT DATE INCORRECT
+        
+    }
     
+    //info=1 : Tout vide
+    //info=2 : Pas de départ ni d'arrivée
+    //info=3 : pas de date
+    //info autre : Format date incorrecte
+    public void boiteDialogueError(int info){
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur de saisie");
+        alert.setHeaderText("Informations manquantes !");
+        switch (info) {
+            case 1:
+                alert.setContentText("Veuillez entrer soit une ville de départ, soit une ville d'arrivée ainsi qu'une date");
+                break;
+            case 2:
+                alert.setContentText("Veuillez entrer une ville de départ ou une ville d'arrivée");
+                break;
+            case 3:
+                alert.setContentText("Veuillez entrer une date");
+                break;
+            default:
+                alert.setContentText("Format de la date incorrecte (Rappel du format : JJ/MM/AAAA");
+                break;
+        }
+        
+        alert.showAndWait();
+    }
     
 }

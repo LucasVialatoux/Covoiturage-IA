@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ========================================
 Project Covoiturage build script updated
 ========================================
@@ -21,3 +22,5 @@ javafx.disable.autoupdate.notification=true
 Remark: Files nbproject/jfx-impl_backup*.xml and this file nbproject/UPDATED.TXT
 are not used when building the project and can be freely deleted.
 
+=======
+>>>>>>> 1d73b1815420f4bf332211c62f670f350073622a

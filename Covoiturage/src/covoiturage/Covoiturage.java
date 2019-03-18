@@ -5,17 +5,7 @@
  */
 package covoiturage;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -23,9 +13,10 @@ import javafx.stage.Stage;
  * @author antoine dulhoste
  */
 public class Covoiturage extends Application {
-
+    
+    @Override
     public void start(Stage primaryStage){
-        new PageAccueil();
+        PageAccueil pageAccueil = new PageAccueil();
     }
     /**
      * @param args the command line arguments
