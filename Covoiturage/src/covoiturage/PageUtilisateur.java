@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import static java.lang.System.console;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,10 +19,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 /**
@@ -34,17 +37,19 @@ public class PageUtilisateur{
     public TextField fieldEmail;
     public PasswordField fieldPassword;
     public Stage stage;
-    public Pane root;
+    public BorderPane root;
     
     public PageUtilisateur(){
         this.stage=new Stage();
-        this.root = new Pane(); 
+        this.root = new BorderPane();
         Scene scene = new Scene(this.root, 1200, 675);
+        this.stage.setScene(scene);
+        this.stage.show();
         this.stage.setTitle("Covoiturage");
         String imageURI = new File("icone.jpg").toURI().toString(); 
         Image image = new Image(imageURI);
         this.stage.getIcons().add(image);
-        this.stage.setScene(scene);
+        
         root.setStyle("-fx-background-color: #efefef;");        
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(20));
@@ -76,6 +81,15 @@ public class PageUtilisateur{
                                     }
                                 }
                             });
+        
+        Button backButton = new Button("Retour");
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent t) {
+                                        stage.close();
+                                        new PageAccueil();
+                                }
+                            });
  
        // Put on cell (0,1)
        GridPane.setHalignment(labelLastName, HPos.RIGHT);
@@ -90,15 +104,15 @@ public class PageUtilisateur{
        GridPane.setHalignment(labelPassword, HPos.RIGHT);
        grid.add(labelPassword, 0, 4);
  
-       // Horizontal alignment for Users Name field.
+       // Horizontal alignment for last Name field.
        GridPane.setHalignment(fieldLastName, HPos.LEFT);
        grid.add(fieldLastName, 1, 1);
        
-       // Horizontal alignment for Users Name field.
+       // Horizontal alignment for first Name field.
        GridPane.setHalignment(fieldFirstName, HPos.LEFT);
        grid.add(fieldFirstName, 1, 2);
        
-       // Horizontal alignment for Users Name field.
+       // Horizontal alignment for e-mail field.
        GridPane.setHalignment(fieldEmail, HPos.LEFT);
        grid.add(fieldEmail, 1, 3);
  
@@ -106,12 +120,19 @@ public class PageUtilisateur{
        GridPane.setHalignment(fieldPassword, HPos.LEFT);
        grid.add(fieldPassword, 1, 4);
         
-       // Horizontal alignment for Login button.
+       // Horizontal alignment for create button.
        GridPane.setHalignment(createButton, HPos.RIGHT);
        grid.add(createButton, 1, 5);
+       
+       // Horizontal alignment for back button.
+       GridPane.setHalignment(backButton, HPos.LEFT);
+       grid.add(backButton, 1, 5);
 
-       root.getChildren().add(grid);
-       this.stage.show(); 
+       grid.setVgap(4);
+       grid.setHgap(10);
+       grid.setAlignment(Pos.CENTER);
+       root.setCenter(grid);
+        
        
     }
     public boolean Creation() throws IOException{
@@ -120,8 +141,12 @@ public class PageUtilisateur{
         String email = fieldEmail.getText();
         String pwd = fieldPassword.getText();
         if (lastName.isEmpty() || firstName.isEmpty()
-                || email.isEmpty() || pwd.isEmpty() ){
-            boiteDeDialogueE();
+                || email.isEmpty() || pwd.isEmpty() || userExist(email)){
+            if (userExist(email)){
+                boiteDeDialogueMail();
+            } else {
+                boiteDeDialogueE();
+            }
             return false;
         } else {
             Utilisateur u = new Utilisateur(lastID(),lastName,firstName,pwd,false,email);
@@ -149,6 +174,26 @@ public class PageUtilisateur{
         return lastID+1;
     }
     
+    public boolean userExist(String newmail) throws FileNotFoundException{
+        String mail = "";
+        Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
+        while (scanner.hasNextLine()) {
+            String util=scanner.nextLine();
+            String[] parts = util.split(";");
+            for(String x:parts){
+                String[] parts2 = x.split(" ");
+                mail =parts2[5];
+                System.out.println("MAIL : "+mail);
+                System.out.println("NEWMAIL : "+newmail);
+                if (newmail.equals(mail)){
+                    System.out.println("TRUE ! ");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     public void boiteDeDialogueE(){ 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Inscription");
@@ -157,11 +202,25 @@ public class PageUtilisateur{
         alert.showAndWait();   
     }
     
+    public void boiteDeDialogueMail(){ 
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Inscription");
+        alert.setHeaderText("ERREUR!");
+        alert.setContentText("Un compte est déjà associé à cet e-mail !");
+        alert.showAndWait();   
+    }
+    
     public void boiteDeDialogueI(){ 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getButtonTypes().remove(ButtonType.CANCEL);
         alert.setTitle("Inscription");
         alert.setHeaderText("Inscription validée");
         alert.setContentText("Merci pour votre inscription !");
-        alert.showAndWait();   
+        Optional<ButtonType> result = alert.showAndWait();
+        //button ok pressed
+        if(result.isPresent() && result.get() == ButtonType.OK ){
+            stage.close();
+            new PageAccueil();
+        }
     }
 }

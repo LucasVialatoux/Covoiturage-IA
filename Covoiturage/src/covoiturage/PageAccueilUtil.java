@@ -48,7 +48,7 @@ public class PageAccueilUtil extends Fenetre {
         }
     public ObservableList<Discussion> disUtil(){
         ObservableList<Discussion> data =FXCollections.observableArrayList();
-        
+        listerRepertoire(new File("messages"));
         return  data;
     }
     public void listerRepertoire(File repertoire){ 
