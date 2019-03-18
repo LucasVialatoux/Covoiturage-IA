@@ -183,10 +183,7 @@ public class PageUtilisateur{
             for(String x:parts){
                 String[] parts2 = x.split(" ");
                 mail =parts2[5];
-                System.out.println("MAIL : "+mail);
-                System.out.println("NEWMAIL : "+newmail);
                 if (newmail.equals(mail)){
-                    System.out.println("TRUE ! ");
                     return true;
                 }
             }
