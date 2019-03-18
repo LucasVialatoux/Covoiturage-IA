@@ -61,6 +61,7 @@ public abstract class Fenetre  {
         accueil.setOnAction(new ChangeMenu(this.util,3));
         MenuItem PropV = new MenuItem("Proposer un voyage");
         MenuItem cherV = new MenuItem("Chercher un voyage");
+        cherV.setOnAction(new ChangeMenu(this.util,5));
         MenuItem voirDisc = new MenuItem("Voir discussions");
         voirDisc.setOnAction(new ChangeMenu(this.util,4));
         mesVoyages.getItems().setAll(accueil,PropV,cherV,voirDisc);
@@ -108,6 +109,9 @@ public abstract class Fenetre  {
                             Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    break;
+                case 5:
+                    PageRecherche recherche =new PageRecherche(this.util);
                     break;
                 default:
                     break;

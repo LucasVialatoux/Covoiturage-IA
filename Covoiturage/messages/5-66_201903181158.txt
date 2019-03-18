@@ -1,0 +1,11 @@
+50|Paris Lyon|2010-10-10|
+nouveau prix 2;
+nouveau prix 10;
+nouveau prix 25;
+nouveau prix 17;
+nouveau prix 35;
+nouveau prix 4;
+nouveau prix 48;
+nouveau prix 22;
+nouveau prix 25;
+nouveau prix 41;

@@ -7,12 +7,16 @@ package covoiturage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
+import static javafx.geometry.HPos.LEFT;
+import static javafx.geometry.HPos.RIGHT;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -20,29 +24,34 @@ import javafx.scene.layout.VBox;
  */
 public class PageMessage extends Fenetre{
     
-    private final VBox chatBox = new VBox(5);
-    private final List<Label> messages = new ArrayList<>();
     private int index = 0;
        
     public PageMessage(Utilisateur user,Discussion disc) throws IOException{
         super(user);
+        GridPane grid = new GridPane();
         
         ArrayList<String> messagesString=disc.recupererConversation();
         
-        ObservableList listMsg = chatBox.getChildren(); 
-        
         messagesString.forEach((s) -> {
-            this.messages.add(new Label(s));
+            Label msg = new Label(s);
+            Color color= Color.WHITE;
             if(index%2==0){
-                this.messages.get(index).setAlignment(Pos.CENTER_LEFT);
+                GridPane.setHalignment(msg,LEFT);
+                grid.add(msg,0,index);
             }else{
-                this.messages.get(index).setAlignment(Pos.CENTER_RIGHT);
+                color= Color.LIGHTGREEN;
+                GridPane.setHalignment(msg,RIGHT);
+                grid.add(msg,1,index);
             }
-            listMsg.add(this.messages.get(index));
+            
+            msg.setBackground(new Background(new BackgroundFill(color, new CornerRadii(10), Insets.EMPTY)));
+            msg.setPadding(new Insets(10, 10, 10, 10));
             index++;
         });
-        
-        root.setCenter(chatBox);
+        grid.setVgap(4);
+        grid.setHgap(10);
+        grid.setAlignment(Pos.CENTER);
+        root.setCenter(grid);
     }
 }
 
