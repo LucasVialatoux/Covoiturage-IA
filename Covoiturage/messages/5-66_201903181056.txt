@@ -1,0 +1,5 @@
+50|Paris Lyon|2010-10-10|
+msg1;
+msg2;
+msg3;
+msg4;

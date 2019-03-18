@@ -6,12 +6,14 @@
 package covoiturage;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -47,10 +49,15 @@ public class Discussion {
     }
     
     public ArrayList<String> recupererConversation() throws IOException{
-        String path = "messages/"+this.user1.id+"-"+this.user2.id+".txt";
-        File f = new File(path);
+        File f = new File("messages/.");              
+        String pattern = this.user1.id+"-"+this.user2.id+".*.txt";
+        final Pattern p = Pattern.compile(pattern);
+        File[] pagesTemplates;
+        pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
+        f=pagesTemplates[0];
+        
+        ArrayList<String> str=new ArrayList();
         if(f.exists() && !f.isDirectory()) { 
-            ArrayList<String> str=new ArrayList();
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()){
                 String temp = sc.nextLine();
@@ -59,7 +66,7 @@ public class Discussion {
                     str.add(temp);
                 }                    
             }
-            return str;
+            System.out.println("temp");
         }
         return null;
     }
