@@ -96,7 +96,7 @@ public class Discussion {
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()){
                 String temp = sc.nextLine();
-                if(!"|".equals(temp.substring(temp.length() - 1))){
+                if(!"#".equals(temp.substring(temp.length() - 1))){
                     temp=temp.substring(0,temp.length() - 1);
                     str.add(temp);
                 }                    
@@ -113,41 +113,53 @@ public class Discussion {
     
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
-        //utilisateur commence à négocier
         int quiParle = 0;
-        int minConducteur=0;
-        int minUtilisateur=0;
-        int nbreNegocie = negociationPrix(minUtilisateur,this.prix);
-        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<10){
+        int prixConducteurActuel=1;
+        int prixUtilActuel=0;
+        
+        //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
+        int pourcentageRnd = (int)(Math.random() * (21));
+        int prixMaxUtilisateur = (this.prix)-(this.prix*pourcentageRnd/100);
+        System.out.println("prixMaxUtilisateur : "+prixMaxUtilisateur);
+        //Prix minimum conducteur = random entre 0 et 25% du prix de base en moins
+        pourcentageRnd = 0 + (int)(Math.random() * ((25 - 0) + 1));
+        int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
+        System.out.println("prixMinConducteur : "+prixMinConducteur);
+        int nbreNegocie = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
+        
+        //Début Négociation
+        while (prixUtilActuel!=prixConducteurActuel){
             String newMessage;
-            //On teste le nouveau prix
-            if (nbreNegocie==0){
-                newMessage="Abandon";
-            }else if(nbreNegocie==this.prix){
-                newMessage="ok";
-            }
-            
-            //Utilisateur premier passage
+            //Utilisateur première itération
             if (quiParle%2==0 && quiParle==0){
-                minUtilisateur=nbreNegocie;
-                newMessage="prix proposé utilisateur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
-            //Utilisateur ensuite
-            }else if(quiParle%2==0){
-                minUtilisateur=nbreNegocie;
-                if(nbreNegocie>minUtilisateur){
-                    newMessage="prix proposé utilisateur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                prixUtilActuel=nbreNegocie;
+                newMessage="prix proposé utilisateur : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
+            //Utilisateur
+            } else if (quiParle%2==0){
+                prixUtilActuel=nbreNegocie;
+                if(prixUtilActuel<prixConducteurActuel){
+                    newMessage="prix proposé utilisateur : "+prixUtilActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
                 } else{
-                    newMessage="utilisateur ok avec prix : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
-                    quiParle=10;
+                    newMessage="utilisateur ok avec prix : "+prixUtilActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
+                    prixUtilActuel=prixConducteurActuel;
+                }
+            //Conducteur première réponse
+            } else if (quiParle%2==1 && quiParle==1){
+                prixConducteurActuel=nbreNegocie;
+                if(prixUtilActuel<prixMinConducteur){
+                    newMessage ="prix proposé conducteur : "+prixConducteurActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
+                } else {
+                    newMessage="conducteur ok avec prix : "+prixConducteurActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
+                    prixConducteurActuel=prixUtilActuel;
                 }
             //Conducteur
             } else {
-                minConducteur=nbreNegocie;
-                if(minUtilisateur<minConducteur){
-                    newMessage ="prix proposé conducteur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                prixConducteurActuel=nbreNegocie;
+                if(prixUtilActuel<prixConducteurActuel){
+                    newMessage ="prix proposé conducteur : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
                 } else {
-                    newMessage="conducteur ok avec prix : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
-                    quiParle=10;
+                    newMessage="conducteur ok avec prix : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
+                    prixConducteurActuel=prixUtilActuel;
                 }
             }
                 
@@ -156,10 +168,13 @@ public class Discussion {
             //On regénère un nouveau prix
             if (quiParle%2==0){
                 //Utilisateur veut négocier
-                nbreNegocie = negociationPrix(minUtilisateur,this.prix);
-            } else{
-                //Conducteur veut négocier
-                nbreNegocie = negociationPrix(minConducteur,this.prix);
+                nbreNegocie = negociationPrix(prixConducteurActuel,prixMaxUtilisateur);
+            } else if(quiParle==1){
+                //Conducteur veut négocier (1ère itération)
+                nbreNegocie = negociationPrix(prixMinConducteur,this.prix);
+            } else {
+                //Conducteur veut négocier (après)
+                nbreNegocie = negociationPrix(prixMinConducteur,this.prix);
             }
             quiParle++;
         }
@@ -168,8 +183,8 @@ public class Discussion {
     
     //typePersonne == 0 : Utilisateur (veut descendre le prix
     //typePersonne == 1 : Conducteur (ne veut pas trop descendre le prix)
-    public int negociationPrix(int min,int prix){
-        int rndNumber = min + (int)(Math.random() * ((prix - min) + 1));
+    public int negociationPrix(int min,int max){
+        int rndNumber = min + (int)(Math.random() * ((max - min) + 1));
         if(rndNumber<=0){
             return 0;
         } else {
