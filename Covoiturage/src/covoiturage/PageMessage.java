@@ -16,6 +16,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Color;
 
 /**
@@ -29,7 +30,7 @@ public class PageMessage extends Fenetre{
     public PageMessage(Utilisateur user,Discussion disc) throws IOException{
         super(user);
         GridPane grid = new GridPane();
-        
+        ScrollPane scroll = new ScrollPane();
         ArrayList<String> messagesString=disc.recupererConversation();
         
         messagesString.forEach((s) -> {
@@ -51,7 +52,9 @@ public class PageMessage extends Fenetre{
         grid.setVgap(4);
         grid.setHgap(10);
         grid.setAlignment(Pos.CENTER);
-        root.setCenter(grid);
+        scroll.setContent(grid);
+        scroll.setFitToWidth(true);
+        root.setCenter(scroll);
     }
 }
 

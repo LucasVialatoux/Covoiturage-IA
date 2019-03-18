@@ -77,7 +77,7 @@ public class Discussion {
         int nbreNegocie = negociationPrix(0,this.prix);
         int quiParle = 0;
         
-        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<10){
+        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<50){
             String newMessage;
             //On teste le nouveau prix
             if (nbreNegocie==0){
