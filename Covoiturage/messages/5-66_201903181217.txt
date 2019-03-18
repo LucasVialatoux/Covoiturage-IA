@@ -1,0 +1,3 @@
+50|Paris Lyon|2010-10-10|
+prix proposé utilisateur : 46 minUtilisateur : 46 minConducteur : 0;
+conducteur ok avec prix : 46 minUtilisateur : 46 minConducteur : 46;

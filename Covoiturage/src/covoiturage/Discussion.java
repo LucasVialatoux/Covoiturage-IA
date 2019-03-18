@@ -74,31 +74,54 @@ public class Discussion {
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
         //utilisateur commence à négocier
-        int nbreNegocie = negociationPrix(0,this.prix);
         int quiParle = 0;
-        
-        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<50){
+        int minConducteur=0;
+        int minUtilisateur=0;
+        int nbreNegocie = negociationPrix(minUtilisateur,this.prix);
+        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<10){
             String newMessage;
             //On teste le nouveau prix
             if (nbreNegocie==0){
-                newMessage="pas ok";
-            } else if(nbreNegocie==this.prix){
+                newMessage="Abandon";
+            }else if(nbreNegocie==this.prix){
                 newMessage="ok";
-            }else {
-                newMessage="nouveau prix "+nbreNegocie;
             }
+            
+            //Utilisateur premier passage
+            if (quiParle%2==0 && quiParle==0){
+                minUtilisateur=nbreNegocie;
+                newMessage="prix proposé utilisateur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+            //Utilisateur ensuite
+            }else if(quiParle%2==0){
+                minUtilisateur=nbreNegocie;
+                if(nbreNegocie>minUtilisateur){
+                    newMessage="prix proposé utilisateur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                } else{
+                    newMessage="utilisateur ok avec prix : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                    quiParle=10;
+                }
+            //Conducteur
+            } else {
+                minConducteur=nbreNegocie;
+                if(minUtilisateur<minConducteur){
+                    newMessage ="prix proposé conducteur : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                } else {
+                    newMessage="conducteur ok avec prix : "+nbreNegocie+" minUtilisateur : "+minUtilisateur+" minConducteur : "+minConducteur;
+                    quiParle=10;
+                }
+            }
+                
             
             messages.add(newMessage);
             //On regénère un nouveau prix
             if (quiParle%2==0){
                 //Utilisateur veut négocier
-                nbreNegocie = negociationPrix(0,this.prix);
+                nbreNegocie = negociationPrix(minUtilisateur,this.prix);
             } else{
                 //Conducteur veut négocier
-                nbreNegocie = negociationPrix((this.prix/2),this.prix);
+                nbreNegocie = negociationPrix(minConducteur,this.prix);
             }
             quiParle++;
-            System.out.println(quiParle);
         }
         enregisterConversation(messages);
     }
