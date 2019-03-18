@@ -11,6 +11,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -87,10 +89,46 @@ public class PageRecherche extends Fenetre{
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
         
-        if (depart=="" && arrivee=="" && date==null){
-            
+        System.out.println("depart : "+depart);
+        System.out.println("arrivee : "+arrivee);
+        System.out.println("date : "+date);
+        if (depart.isEmpty() && arrivee.isEmpty() && date == null){
+            boiteDialogueError(1);
+        } else if (depart.isEmpty() && arrivee.isEmpty()){
+            boiteDialogueError(2);
+        } else if (date == null){
+            boiteDialogueError(3);
         }
         
+        //A FAIRE :
+        //AJOUTER TEST FORMAT DATE INCORRECT
+        
+    }
+    
+    //info=1 : Tout vide
+    //info=2 : Pas de départ ni d'arrivée
+    //info=3 : pas de date
+    //info autre : Format date incorrecte
+    public void boiteDialogueError(int info){
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur de saisie");
+        alert.setHeaderText("Informations manquantes !");
+        switch (info) {
+            case 1:
+                alert.setContentText("Veuillez entrer soit une ville de départ, soit une ville d'arrivée ainsi qu'une date");
+                break;
+            case 2:
+                alert.setContentText("Veuillez entrer une ville de départ ou une ville d'arrivée");
+                break;
+            case 3:
+                alert.setContentText("Veuillez entrer une date");
+                break;
+            default:
+                alert.setContentText("Format de la date incorrecte (Rappel du format : JJ/MM/AAAA");
+                break;
+        }
+        
+        alert.showAndWait();
     }
     
 }

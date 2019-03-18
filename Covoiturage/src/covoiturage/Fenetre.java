@@ -51,7 +51,6 @@ public abstract class Fenetre  {
         
     }
     public void menu(){
-        System.out.println(this.util);
         MenuBar mainMenu = new MenuBar();  
         Menu application = new Menu("Application");
         MenuItem quitter = new MenuItem("Quitter");
@@ -78,7 +77,6 @@ public abstract class Fenetre  {
     public int page;
     public ChangeMenu(Utilisateur u,int page){
         this.util=u;
-        System.out.println(u);
         this.page=page;
     }
     @Override

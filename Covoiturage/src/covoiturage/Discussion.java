@@ -62,5 +62,47 @@ public class Discussion {
             return str;
         }
         return null;
-    }   
+    }
+    
+    public void conversation() throws IOException{
+        ArrayList messages = new ArrayList<>();
+        //utilisateur commence à négocier
+        int nbreNegocie = negociationPrix(0,this.prix);
+        int quiParle = 0;
+        while (nbreNegocie!= 0 || nbreNegocie!= this.prix ){
+            String newMessage;
+            //On teste le nouveau prix
+            if (nbreNegocie==0){
+                newMessage="pas ok";
+            } else if(nbreNegocie==this.prix){
+                newMessage="ok";
+            }else {
+                newMessage="nouveau prix "+this.prix;
+            }
+            messages.add(newMessage);
+            //On regénère un nouveau prix
+            if (quiParle%2==0){
+                //Utilisateur veut négocier
+                nbreNegocie = negociationPrix(0,this.prix);
+            } else{
+                //Conducteur veut négocier
+                nbreNegocie = negociationPrix((this.prix/2),this.prix);
+            }
+            
+        }
+        enregisterConversation(messages);
+    }
+    
+    //typePersonne == 0 : Utilisateur (veut descendre le prix
+    //typePersonne == 1 : Conducteur (ne veut pas trop descendre le prix)
+    public int negociationPrix(int min,int prix){
+        int rndNumber = min + (int)(Math.random() * ((prix - min) + 1));
+        if (rndNumber == prix){
+                return prix;
+            } else if(rndNumber<=0){
+                return 0;
+            } else {
+                return rndNumber;
+            }
+    }
 }

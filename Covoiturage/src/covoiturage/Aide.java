@@ -19,12 +19,10 @@ import javafx.stage.Stage;
 public class Aide extends Fenetre {
     public Aide(Utilisateur util){
         super(util);
-        System.out.println(this.util);
         text();
     }
     public void text(){
         Font police = Font.loadFont(Aide.class.getResourceAsStream("/GOTHICB0.TTF"), 20);;
-        System.out.println(police);
         Text aide=new Text();
         aide.setText("  Logiciel de covoiturage\n\n            crée par     \n\n    Antoine DULHOSTE\n\n      Martin DULHOSTE\n\n      Lucas VIALATOUX");
         aide.setFont(police);
