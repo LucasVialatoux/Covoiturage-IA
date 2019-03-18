@@ -1,7 +1,2 @@
 10|Paris-Lyon|2010|
 test;
-test2;
-10|Paris-Lyon|2010|
-test;
-test2;
-test3;
