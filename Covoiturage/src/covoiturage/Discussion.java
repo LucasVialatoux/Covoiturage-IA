@@ -68,7 +68,7 @@ public class Discussion {
             }
             System.out.println("temp");
         }
-        return null;
+        return str;
     }
     
     public void conversation() throws IOException{
@@ -76,7 +76,8 @@ public class Discussion {
         //utilisateur commence à négocier
         int nbreNegocie = negociationPrix(0,this.prix);
         int quiParle = 0;
-        while (nbreNegocie!= 0 || nbreNegocie!= this.prix ){
+        
+        while (nbreNegocie!= 0 && nbreNegocie!=this.prix && quiParle<10){
             String newMessage;
             //On teste le nouveau prix
             if (nbreNegocie==0){
@@ -84,8 +85,9 @@ public class Discussion {
             } else if(nbreNegocie==this.prix){
                 newMessage="ok";
             }else {
-                newMessage="nouveau prix "+this.prix;
+                newMessage="nouveau prix "+nbreNegocie;
             }
+            
             messages.add(newMessage);
             //On regénère un nouveau prix
             if (quiParle%2==0){
@@ -95,7 +97,8 @@ public class Discussion {
                 //Conducteur veut négocier
                 nbreNegocie = negociationPrix((this.prix/2),this.prix);
             }
-            
+            quiParle++;
+            System.out.println(quiParle);
         }
         enregisterConversation(messages);
     }
@@ -104,12 +107,10 @@ public class Discussion {
     //typePersonne == 1 : Conducteur (ne veut pas trop descendre le prix)
     public int negociationPrix(int min,int prix){
         int rndNumber = min + (int)(Math.random() * ((prix - min) + 1));
-        if (rndNumber == prix){
-                return prix;
-            } else if(rndNumber<=0){
-                return 0;
-            } else {
-                return rndNumber;
-            }
+        if(rndNumber<=0){
+            return 0;
+        } else {
+            return rndNumber;
+        }
     }
 }

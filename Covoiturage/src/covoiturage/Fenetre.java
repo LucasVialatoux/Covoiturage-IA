@@ -75,7 +75,6 @@ public abstract class Fenetre  {
         
         public ChangeMenu(Utilisateur u,int page){
             this.util=u;
-            System.out.println(u);
             this.page=page;
         }
         
@@ -95,11 +94,9 @@ public abstract class Fenetre  {
                 case 4:
                     Utilisateur util2 = new Utilisateur(66,"d","d","d",false,"d.d");
                     Discussion disc = new Discussion(this.util,util2,50,"Paris Lyon","2010-10-10");
-                    ArrayList<String> messages=new ArrayList();
-                    messages.add("msg1");messages.add("msg2");messages.add("msg3");messages.add("msg4");
                     {
                         try {
-                            disc.enregisterConversation(messages);
+                            disc.conversation();
                         } catch (IOException ex) {
                             Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
                         }
