@@ -119,70 +119,80 @@ public class Discussion {
     
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
-        int quiParle = 0;
+        boolean estUtilisateur = false;
         int prixConducteurActuel=1;
-        int prixUtilActuel=0;
-        
+        int prixUtilActuel=(this.prix)-(this.prix*60/100);
+        System.out.println("prixUtilActuel : "+prixUtilActuel);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
+        pourcentageRnd=20;
         int prixMaxUtilisateur = (this.prix)-(this.prix*pourcentageRnd/100);
-        System.out.println("prixMaxUtilisateur : "+prixMaxUtilisateur);
+        System.out.println("prixMaxUtilisateur : "+prixMaxUtilisateur+"pourcentageRnd : "+pourcentageRnd);
         //Prix minimum conducteur = random entre 0 et 25% du prix de base en moins
-        pourcentageRnd = 0 + (int)(Math.random() * ((25 - 0) + 1));
+        //pourcentageRnd = (int)(Math.random() * (26));
+        pourcentageRnd=1;
         int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
-        System.out.println("prixMinConducteur : "+prixMinConducteur);
-        int nbreNegocie = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
-        
+        System.out.println("prixMinConducteur : "+prixMinConducteur+"pourcentageRnd : "+pourcentageRnd);
+        int nbreUtil = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
+        String newMessage;
+        newMessage = "L'utilisateur propose "+nbreUtil+"€";
+        messages.add(newMessage);
+        boolean discussionFini = false;
+        boolean premierIteration = true;
         //Début Négociation
-        while (prixUtilActuel!=prixConducteurActuel){
-            String newMessage;
-            //Utilisateur première itération
-            if (quiParle%2==0 && quiParle==0){
-                prixUtilActuel=nbreNegocie;
-                newMessage="prix proposé utilisateur : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
+        int nbreNegocie=0;
+        int compteur =1;
+        int prixC = 0;
+        int prixUtil = 0;
+        while (!discussionFini){
             //Utilisateur
-            } else if (quiParle%2==0){
-                prixUtilActuel=nbreNegocie;
-                if(prixUtilActuel<prixConducteurActuel){
-                    newMessage="prix proposé utilisateur : "+prixUtilActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
-                } else{
-                    newMessage="utilisateur ok avec prix : "+prixUtilActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMaxUtilisateur : "+prixMaxUtilisateur;
-                    prixUtilActuel=prixConducteurActuel;
-                }
-            //Conducteur première réponse
-            } else if (quiParle%2==1 && quiParle==1){
-                prixConducteurActuel=nbreNegocie;
-                if(prixUtilActuel<prixMinConducteur){
-                    newMessage ="prix proposé conducteur : "+prixConducteurActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
+            if (estUtilisateur){
+                if (prixUtil==1){
+                    newMessage="Utilisateur ne montera pas au dessus de "+nbreUtil+"€";
+                    discussionFini = true;
+                }else if (nbreNegocie<=prixMaxUtilisateur){
+                    newMessage="Utilisateur ok pour "+nbreNegocie+"€";
+                    discussionFini = true;
                 } else {
-                    newMessage="conducteur ok avec prix : "+prixConducteurActuel+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
-                    prixConducteurActuel=prixUtilActuel;
+                    if (nbreUtil == prixMaxUtilisateur){
+                        prixUtil++;
+                    } else {
+                        nbreUtil = negociationPrix(nbreUtil,prixMaxUtilisateur);
+                    }
+                    newMessage = "Utilisateur propose "+ nbreUtil +"€";
+                    estUtilisateur=false;
                 }
-            //Conducteur
+            //conducteur
             } else {
-                prixConducteurActuel=nbreNegocie;
-                if(prixUtilActuel<prixConducteurActuel){
-                    newMessage ="prix proposé conducteur : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
+                if (prixC==1){
+                    newMessage="Conducteur ne descendra pas en dessous de "+nbreNegocie+"€";
+                    discussionFini = true;
+                }else if (nbreUtil>=prixMinConducteur){
+                    newMessage="Conducteur ok pour "+nbreUtil+"€";
+                    discussionFini = true;
                 } else {
-                    newMessage="conducteur ok avec prix : "+nbreNegocie+" prixUtilActuel : "+prixUtilActuel+" prixConducteurActuel : "+prixConducteurActuel+" prixMinConducteur : "+prixMinConducteur;
-                    prixConducteurActuel=prixUtilActuel;
+                    //1ère itération
+                    if (premierIteration){
+                        nbreNegocie = this.prix;
+                        premierIteration = false;
+                    }
+                    if (nbreNegocie == prixMinConducteur){
+                        prixC++;
+                        
+                    } else {
+                        nbreNegocie=negociationPrix(prixMinConducteur,nbreNegocie);
+                    }
+                    newMessage = "Conducteur propose "+ nbreNegocie +"€";
+                    estUtilisateur=true;
                 }
             }
-                
-            
+            System.out.println("prixC"+prixC);
+            compteur++;
+            if (compteur==20){
+                newMessage="Conducteur abandonne car négociation trop longue";
+                discussionFini = true;
+            }
             messages.add(newMessage);
-            //On regénère un nouveau prix
-            if (quiParle%2==0){
-                //Utilisateur veut négocier
-                nbreNegocie = negociationPrix(prixConducteurActuel,prixMaxUtilisateur);
-            } else if(quiParle==1){
-                //Conducteur veut négocier (1ère itération)
-                nbreNegocie = negociationPrix(prixMinConducteur,this.prix);
-            } else {
-                //Conducteur veut négocier (après)
-                nbreNegocie = negociationPrix(prixMinConducteur,this.prix);
-            }
-            quiParle++;
         }
         enregisterConversation(messages);
     }
