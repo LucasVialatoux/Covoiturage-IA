@@ -1,0 +1,10 @@
+425#Paris-Lyon#2019-03-14#
+L'utilisateur propose 249€;
+Conducteur propose 425€;
+Utilisateur propose 336€;
+Conducteur propose 422€;
+Utilisateur propose 340€;
+Conducteur propose 421€;
+Utilisateur propose 340€;
+Conducteur propose 421€;
+Utilisateur ne montera pas au dessus de 340€;

@@ -5,7 +5,11 @@
  */
 package covoiturage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -74,7 +78,13 @@ public class PageRecherche extends Fenetre{
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent t) {
-                                    recherche();
+                                    try {
+                                        recherche();
+                                    } catch (FileNotFoundException ex) {
+                                        Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
                             });
         
@@ -84,7 +94,7 @@ public class PageRecherche extends Fenetre{
         root.setCenter(grid);
     }
 
-    public void recherche(){
+    public void recherche() throws FileNotFoundException, IOException{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
@@ -94,12 +104,20 @@ public class PageRecherche extends Fenetre{
         System.out.println("date : "+date);
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
-        } else if (depart.isEmpty() && arrivee.isEmpty()){
+        } else if (depart.isEmpty() || arrivee.isEmpty()){
             boiteDialogueError(2);
         } else if (date == null){
             boiteDialogueError(3);
+        } else{
+            Utilisateur conducteur = this.utilisateurRandom();
+            System.out.println("conducteur : "+conducteur);
+            //random entre 10 et 1000 compris
+            int prixRnd=  (int)(Math.random() * ((1000-10) + 1));
+            Discussion disc = new Discussion(this.util,conducteur,prixRnd,depart+'-'+arrivee,date.toString(),1);
+            stage.close();
+            disc.conversation();
+            new PageMessage(this.util,disc);
         }
-        
         //A FAIRE :
         //AJOUTER TEST FORMAT DATE INCORRECT
         
@@ -118,7 +136,7 @@ public class PageRecherche extends Fenetre{
                 alert.setContentText("Veuillez entrer soit une ville de départ, soit une ville d'arrivée ainsi qu'une date");
                 break;
             case 2:
-                alert.setContentText("Veuillez entrer une ville de départ ou une ville d'arrivée");
+                alert.setContentText("Veuillez entrer une ville de départ et une ville d'arrivée");
                 break;
             case 3:
                 alert.setContentText("Veuillez entrer une date");
