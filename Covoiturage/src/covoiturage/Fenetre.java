@@ -62,12 +62,9 @@ public abstract class Fenetre  {
         Menu mesVoyages = new Menu("Mes voyages");
         MenuItem accueil = new MenuItem("Accueil");
         accueil.setOnAction(new ChangeMenu(this.util,3));
-        MenuItem PropV = new MenuItem("Proposer un voyage");
         MenuItem cherV = new MenuItem("Chercher un voyage");
         cherV.setOnAction(new ChangeMenu(this.util,5));
-        MenuItem voirDisc = new MenuItem("Voir discussions");
-        voirDisc.setOnAction(new ChangeMenu(this.util,4));
-        mesVoyages.getItems().setAll(accueil,PropV,cherV,voirDisc);
+        mesVoyages.getItems().setAll(accueil,cherV);
         mainMenu.getMenus().addAll(mesVoyages,application, aide);
         mainMenu.setUseSystemMenuBar(true);
         this.root.setTop(mainMenu);  
@@ -100,24 +97,6 @@ public abstract class Fenetre  {
                         Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                    break;
-                case 4:
-                    Utilisateur util2 = new Utilisateur(66,"d","d","d",false,"d.d");
-                    Discussion disc = new Discussion(this.util,util2,5000,"Paris Lyon","2010-10-10",1);
-                    {
-                        try {
-                            disc.conversation();
-                        } catch (IOException ex) {
-                            Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    {
-                        try {
-                            PageMessage pagemessage = new PageMessage(this.util,disc);
-                        } catch (IOException ex) {
-                            Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
                     break;
                 case 5:
                     PageRecherche recherche =new PageRecherche(this.util);
