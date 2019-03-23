@@ -1,0 +1,9 @@
+336#paris-lyon#2019-03-21#
+L'utilisateur propose 223€;
+Conducteur propose 335€;
+Utilisateur propose 237€;
+Conducteur propose 333€;
+Utilisateur propose 256€;
+Conducteur propose 333€;
+Utilisateur propose 262€;
+Conducteur ne descendra pas en dessous de 333€;

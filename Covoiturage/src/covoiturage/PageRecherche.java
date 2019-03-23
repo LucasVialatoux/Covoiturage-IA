@@ -99,9 +99,6 @@ public class PageRecherche extends Fenetre{
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
         
-        System.out.println("depart : "+depart);
-        System.out.println("arrivee : "+arrivee);
-        System.out.println("date : "+date);
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
         } else if (depart.isEmpty() || arrivee.isEmpty()){
@@ -110,10 +107,9 @@ public class PageRecherche extends Fenetre{
             boiteDialogueError(3);
         } else{
             Utilisateur conducteur = this.utilisateurRandom();
-            System.out.println("conducteur : "+conducteur);
             //random entre 10 et 1000 compris
             int prixRnd=  (int)(Math.random() * ((1000-10) + 1));
-            Discussion disc = new Discussion(this.util,conducteur,prixRnd,depart+'-'+arrivee,date.toString(),1);
+            Discussion disc = new Discussion(this.util,conducteur,prixRnd,depart+'-'+arrivee,date.toString());
             stage.close();
             disc.conversation();
             new PageMessage(this.util,disc);

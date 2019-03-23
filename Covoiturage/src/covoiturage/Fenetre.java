@@ -132,7 +132,6 @@ public abstract class Fenetre  {
                 String[] parts2 = parts[rnd].split(" ");
                 utilisateur=new Utilisateur(Integer.parseInt(parts2[0]),parts2[1],parts2[2],parts2[3],Boolean.parseBoolean(parts2[4]),parts2[5]);
                 while(this.util.id == utilisateur.id){
-                    System.out.println("utilisateur : "+utilisateur);
                     rnd = (int)(Math.random() * (parts.length));
                     parts2 = parts[rnd].split(" ");
                     utilisateur=new Utilisateur(Integer.parseInt(parts2[0]),parts2[1],parts2[2],parts2[3],Boolean.parseBoolean(parts2[4]),parts2[5]);

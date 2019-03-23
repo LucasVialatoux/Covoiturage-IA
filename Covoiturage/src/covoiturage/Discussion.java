@@ -61,11 +61,13 @@ public class Discussion {
     private String voyage;
     private String date;
     private String voyageur;
+    private String dateNomF;
             
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,int i){
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN,int i){
         this.user1=user1;
         this.user2=user2;
         this.prix=prix;
+        this.dateNomF=dateN;
         this.voyage=voyage;
         this.date=date;
         if(i==1){
@@ -73,6 +75,14 @@ public class Discussion {
         }else{
             this.voyageur=this.user2.nom;
         }
+    }
+    
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
+        this.user1=user1;
+        this.user2=user2;
+        this.prix=prix;
+        this.voyage=voyage;
+        this.date=date;
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
@@ -83,15 +93,15 @@ public class Discussion {
  
         String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
         String path = "messages/"+this.getUser1().id+"-"+this.getUser2().id+"-"+dateTime+".txt";
-        
+        this.dateNomF=dateTime+".txt";
         FileWriter fw = new FileWriter(path,true);
         fw.write(ajout);
         fw.close();
     }
     
     public ArrayList<String> recupererConversation() throws IOException{
-        File f = new File("messages/.");              
-        String pattern = this.user1.id+"-"+this.user2.id+".*.txt";
+        File f = new File("messages/.");    
+        String pattern = this.user1.id+"-"+this.user2.id+"-"+this.dateNomF;
         final Pattern p = Pattern.compile(pattern);
         File[] pagesTemplates;
         pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
@@ -107,7 +117,6 @@ public class Discussion {
                     str.add(temp);
                 }                    
             }
-            System.out.println("temp");
         }
         return str;
     }
@@ -120,19 +129,13 @@ public class Discussion {
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
         boolean estUtilisateur = false;
-        int prixConducteurActuel=1;
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
-        System.out.println("prixUtilActuel : "+prixUtilActuel);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
-        pourcentageRnd=20;
         int prixMaxUtilisateur = (this.prix)-(this.prix*pourcentageRnd/100);
-        System.out.println("prixMaxUtilisateur : "+prixMaxUtilisateur+"pourcentageRnd : "+pourcentageRnd);
         //Prix minimum conducteur = random entre 0 et 25% du prix de base en moins
-        //pourcentageRnd = (int)(Math.random() * (26));
-        pourcentageRnd=1;
+        pourcentageRnd = (int)(Math.random() * (26));
         int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
-        System.out.println("prixMinConducteur : "+prixMinConducteur+"pourcentageRnd : "+pourcentageRnd);
         int nbreUtil = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
         String newMessage;
         newMessage = "L'utilisateur propose "+nbreUtil+"€";
@@ -186,7 +189,6 @@ public class Discussion {
                     estUtilisateur=true;
                 }
             }
-            System.out.println("prixC"+prixC);
             compteur++;
             if (compteur==20){
                 newMessage="Conducteur abandonne car négociation trop longue";

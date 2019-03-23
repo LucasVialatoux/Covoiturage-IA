@@ -81,7 +81,7 @@ public class PageAccueilUtil extends Fenetre {
                 if(parts[1].equals(Integer.toString(this.util.id))){
                     i=1;
                 }
-                Discussion dis=new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2],i);
+                Discussion dis=new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2],parts[2],i);
                 data.add(dis);
             }
         }

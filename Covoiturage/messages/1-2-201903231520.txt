@@ -1,0 +1,9 @@
+550#lyon-clermont#2019-03-24#
+L'utilisateur propose 406€;
+Conducteur propose 546€;
+Utilisateur propose 409€;
+Conducteur propose 545€;
+Utilisateur propose 432€;
+Conducteur propose 545€;
+Utilisateur propose 438€;
+Conducteur ne descendra pas en dessous de 545€;
