@@ -60,7 +60,7 @@ public class Discussion {
     private int prix;
     private String voyage;
     private String date;
-    private String voyageur;
+    private String conducteur;
     private String dateNomF;
             
     public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN,int i){
@@ -71,9 +71,9 @@ public class Discussion {
         this.voyage=voyage;
         this.date=date;
         if(i==1){
-            this.voyageur=this.user1.nom;
+            this.conducteur=this.user1.nom;
         }else{
-            this.voyageur=this.user2.nom;
+            this.conducteur=this.user2.nom;
         }
     }
     
@@ -211,9 +211,9 @@ public class Discussion {
     }
 
     /**
-     * @return the voyageur
+     * @return the driver
      */
-    public String getVoyageur() {
-        return voyageur;
+    public String getConducteur() {
+        return conducteur;
     }
 }

@@ -1,0 +1,5 @@
+249#lyon-lyon#2019-02-26#
+L'utilisateur propose 137€;
+Conducteur propose 249€;
+Utilisateur propose 198€;
+Conducteur ne descendra pas en dessous de 249€;
