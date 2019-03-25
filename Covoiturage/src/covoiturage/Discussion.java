@@ -62,7 +62,7 @@ public class Discussion {
     private String date;
     private String conducteur;
     private String dateNomF;
-            
+       
     public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN,int i){
         this.user1=user1;
         this.user2=user2;
@@ -208,6 +208,24 @@ public class Discussion {
         } else {
             return rndNumber;
         }
+    }
+    
+    //Création des préférences du voyageur pour ce voyage
+    public ArrayList <String> initPreferenceVoyageur(){
+        ArrayList <String> tabV;
+        tabV = new ArrayList();
+        
+        
+        
+        return tabV;
+    }
+    
+    //Création des préférences du conducteur pour ce voyage
+    public ArrayList <String> initPreferenceConducteur(){
+        ArrayList <String> tabC;
+        tabC = new ArrayList();
+        
+        return tabC;
     }
 
     /**

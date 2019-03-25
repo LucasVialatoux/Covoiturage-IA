@@ -5,8 +5,12 @@
  */
 package covoiturage;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -19,6 +23,7 @@ public class Utilisateur {
     public String mdp;
     public boolean estAdmin; //false:utilisteur true:admin
     public String email;
+    public ArrayList<Integer> tabPref;
     
     public Utilisateur(int id,String nom,String prenom,String mdp,boolean estAdmin,String email){
         this.id=id;
@@ -40,4 +45,13 @@ public class Utilisateur {
         return "id:"+this.id+" nom:"+this.nom+" prenom:"+this.prenom+" mdp:"+this.mdp+" estAdmin"+this.estAdmin+" email:"+this.email;
     }
     
+    public void creerPrefUtil(ArrayList<Integer> tabPref) throws IOException{
+        String preference="";
+        for(int i=0;i<tabPref.size();i++){
+            preference+=tabPref.get(i)+";";
+        }
+        FileWriter fw = new FileWriter("preference/."+this.id+".txt",true);
+        fw.write(preference);
+        fw.close();
+    }
 }
