@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -75,18 +74,15 @@ public class PageRecherche extends Fenetre{
         GridPane.setHalignment(searchButton, HPos.RIGHT);
         grid.add(searchButton, 1, 4);
 
-        searchButton.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent t) {
-                                    try {
-                                        recherche();
-                                    } catch (FileNotFoundException ex) {
-                                        Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
-                                    } catch (IOException ex) {
-                                        Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }
-                            });
+        searchButton.setOnAction((ActionEvent t) -> {
+            try {
+                recherche();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         grid.setVgap(4);
         grid.setHgap(10);

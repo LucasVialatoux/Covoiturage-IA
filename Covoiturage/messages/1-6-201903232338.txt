@@ -1,9 +1,0 @@
-902#montpelier-lyon#2019-03-28#
-L'utilisateur propose 561€;
-Conducteur propose 897€;
-Utilisateur propose 586€;
-Conducteur propose 893€;
-Utilisateur propose 629€;
-Conducteur propose 893€;
-Utilisateur propose 701€;
-Conducteur ne descendra pas en dessous de 893€;

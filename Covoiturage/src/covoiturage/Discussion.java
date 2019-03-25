@@ -6,7 +6,6 @@
 package covoiturage;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -21,65 +20,31 @@ import java.util.regex.Pattern;
  */
 public class Discussion {
 
-    /**
-     * @return the user1
-     */
-    public Utilisateur getUser1() {
-        return user1;
-    }
-
-    /**
-     * @return the user2
-     */
-    public Utilisateur getUser2() {
-        return user2;
-    }
-
-    /**
-     * @return the prix
-     */
-    public int getPrix() {
-        return prix;
-    }
-
-    /**
-     * @return the voyage
-     */
-    public String getVoyage() {
-        return voyage;
-    }
-
-    /**
-     * @return the date
-     */
-    public String getDate() {
-        return date;
-    }
-    private Utilisateur user1;
-    private Utilisateur user2;
+    private Utilisateur voyageur;
+    private String nomvoyageur;
+    private Utilisateur conducteur;
+    private String nomconducteur;
     private int prix;
     private String voyage;
     private String date;
-    private String conducteur;
     private String dateNomF;
-       
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN,int i){
-        this.user1=user1;
-        this.user2=user2;
+            
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN){
+        this.voyageur=user1;
+        this.nomvoyageur=this.voyageur.nom;
+        this.conducteur=user2;
+        this.nomconducteur=this.conducteur.nom;
         this.prix=prix;
         this.dateNomF=dateN;
         this.voyage=voyage;
         this.date=date;
-        if(i==1){
-            this.conducteur=this.user1.nom;
-        }else{
-            this.conducteur=this.user2.nom;
-        }
     }
     
     public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
-        this.user1=user1;
-        this.user2=user2;
+        this.voyageur=user1;
+        this.nomvoyageur=this.voyageur.nom;
+        this.conducteur=user2;
+        this.nomconducteur=this.conducteur.nom;
         this.prix=prix;
         this.voyage=voyage;
         this.date=date;
@@ -92,7 +57,7 @@ public class Discussion {
         }
  
         String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-        String path = "messages/"+this.getUser1().id+"-"+this.getUser2().id+"-"+dateTime+".txt";
+        String path = "messages/"+this.getVoyageur().id+"-"+this.getConducteur().id+"-"+dateTime+".txt";
         this.dateNomF=dateTime+".txt";
         FileWriter fw = new FileWriter(path,true);
         fw.write(ajout);
@@ -101,7 +66,7 @@ public class Discussion {
     
     public ArrayList<String> recupererConversation() throws IOException{
         File f = new File("messages/.");    
-        String pattern = this.user1.id+"-"+this.user2.id+"-"+this.dateNomF;
+        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.dateNomF;
         final Pattern p = Pattern.compile(pattern);
         File[] pagesTemplates;
         pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
@@ -229,9 +194,42 @@ public class Discussion {
     }
 
     /**
-     * @return the driver
+     * @return the prix
      */
-    public String getConducteur() {
+    public int getPrix() {
+        return prix;
+    }
+
+    /**
+     * @return the voyage
+     */
+    public String getVoyage() {
+        return voyage;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    public Utilisateur getVoyageur() {
+        return voyageur;
+    }
+
+    public Utilisateur getConducteur() {
         return conducteur;
     }
+
+    public String getNomvoyageur() {
+        return nomvoyageur;
+    }
+
+    public String getNomconducteur() {
+        return nomconducteur;
+    }
+    
+    
+    
 }

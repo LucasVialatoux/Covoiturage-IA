@@ -8,8 +8,6 @@ package covoiturage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +45,7 @@ public abstract class Fenetre  {
         this.stage.show(); 
         
     }
+    
     public void menu(){
         MenuBar mainMenu = new MenuBar();  
         Menu application = new Menu("Application");

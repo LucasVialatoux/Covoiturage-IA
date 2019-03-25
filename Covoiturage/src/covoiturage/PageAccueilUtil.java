@@ -19,72 +19,124 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author antoine dulhoste
  */
 public class PageAccueilUtil extends Fenetre {
-    
-    public PageAccueilUtil(Utilisateur util) throws FileNotFoundException{
+
+    public PageAccueilUtil(Utilisateur util) throws FileNotFoundException {
         super(util);
-        TableView<Discussion> table = new TableView();
-        ObservableList<Discussion>data =disUtil();
-        TableColumn date = new TableColumn("Date");
-        date.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
-        TableColumn voyage = new TableColumn("Voyage");
-        voyage.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
+
+        TableView<Discussion> tableAnnonces = new TableView();
+        TableView<Discussion> tableReservations = new TableView();
+        ObservableList<Discussion> dataAnnonces = dataAnnonces();
+        ObservableList<Discussion> dataReservations = dataReservations();
+
+        TableColumn dateAnnonces = new TableColumn("Date");
+        dateAnnonces.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
+        dateAnnonces.setSortType(TableColumn.SortType.DESCENDING);
+        TableColumn dateReservations= new TableColumn("Date");
+        dateReservations.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
+        dateReservations.setSortType(TableColumn.SortType.DESCENDING);
+        
+        TableColumn voyageAnnonces = new TableColumn("Voyage");
+        voyageAnnonces.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
+        TableColumn voyageReservations = new TableColumn("Voyage");
+        voyageReservations.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
+        
         TableColumn conducteur = new TableColumn("Conducteur");
-        conducteur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("conducteur"));
-        table.getColumns().addAll(date,voyage,conducteur);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.setCursor(Cursor.CLOSED_HAND);
-        table.getItems().setAll(data);
-        table.setRowFactory( tv -> {
-        TableRow<Discussion> row = new TableRow<>();
+        conducteur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("nomconducteur"));
+        TableColumn voyageur = new TableColumn("Voyageur");
+        voyageur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("nomvoyageur"));
+
+        tableReservations.getColumns().addAll(dateReservations, voyageReservations, voyageur);
+        tableReservations.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableReservations.setCursor(Cursor.CLOSED_HAND);
+        tableReservations.getItems().setAll(dataReservations);
+        tableReservations.getSortOrder().add(dateReservations);
+        tableReservations.setRowFactory(tv -> {
+            TableRow<Discussion> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Discussion rowData = row.getItem();
                     stage.close();
                     try {
-                        PageMessage pagemessage = new PageMessage(this.util,rowData);
+                        PageMessage pagemessage = new PageMessage(this.util, rowData);
                     } catch (IOException ex) {
                         Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
-            return row ;
+            return row;
         });
-        
-        root.setCenter(table);
-        }
-    
-    public ObservableList<Discussion> disUtil() throws FileNotFoundException{
-        ObservableList<Discussion> data =FXCollections.observableArrayList();
-        String [] listeDiscussion;
-        listeDiscussion=listerRepertoire(new File("messages"));
-        for (String s:listeDiscussion){
-            String[] parts = s.split("-");
-            if(parts[0].equals(Integer.toString(this.util.id)) || parts[1].equals(Integer.toString(this.util.id)) ){
-                Scanner scanner = new Scanner(new FileReader("messages\\"+s));
-                String scan=scanner.nextLine();
-                String[] discussion = scan.split("#");
-                Utilisateur util1=this.trouverUtil(parts[0]);
-                Utilisateur util2=this.trouverUtil(parts[1]);
-                int i=2;
-                if(parts[1].equals(Integer.toString(this.util.id))){
-                    i=1;
+
+        tableAnnonces.getColumns().addAll(dateAnnonces, voyageAnnonces, conducteur);
+        tableAnnonces.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableAnnonces.setCursor(Cursor.CLOSED_HAND);
+        tableAnnonces.getItems().setAll(dataAnnonces);
+        tableAnnonces.getSortOrder().add(dateAnnonces);
+        tableAnnonces.setRowFactory(tv -> {
+            TableRow<Discussion> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Discussion rowData = row.getItem();
+                    stage.close();
+                    try {
+                        PageMessage pagemessage = new PageMessage(this.util, rowData);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                Discussion dis=new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2],parts[2],i);
-                data.add(dis);
+            });
+            return row;
+        });
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(tableAnnonces, tableReservations);
+        root.setCenter(vb);
+    }
+
+    public ObservableList<Discussion> dataAnnonces() throws FileNotFoundException {
+        ObservableList<Discussion> data = FXCollections.observableArrayList();
+        String[] listeDiscussion;
+        listeDiscussion = listerRepertoire(new File("messages"));
+        for (String s : listeDiscussion) {
+            String[] parts = s.split("-");
+            if (parts[0].equals(Integer.toString(this.util.id))) {
+                data.add(getDisc(s,parts));
             }
         }
-        return  data;
+        return data;
+    }
+    public ObservableList<Discussion> dataReservations() throws FileNotFoundException {
+        ObservableList<Discussion> data = FXCollections.observableArrayList();
+        String[] listeDiscussion;
+        listeDiscussion = listerRepertoire(new File("messages"));
+        for (String s : listeDiscussion) {
+            String[] parts = s.split("-");
+            if (parts[1].equals(Integer.toString(this.util.id))) {
+                data.add(getDisc(s,parts));
+            }
+        }
+        return data;
+    }
+
+    public Discussion getDisc(String s,String[] parts) throws FileNotFoundException{
+        Scanner scanner = new Scanner(new FileReader("messages\\" + s));
+        String scan = scanner.nextLine();
+        String[] discussion = scan.split("#");
+        Utilisateur util1 = this.trouverUtil(parts[0]);
+        Utilisateur util2 = this.trouverUtil(parts[1]);
+        Discussion dis = new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2], parts[2]);
+        return dis;
     }
     
-    public String[] listerRepertoire(File repertoire){ 
-        String [] listefichiers;
-        listefichiers=repertoire.list(); 
+    public String[] listerRepertoire(File repertoire) {
+        String[] listefichiers;
+        listefichiers = repertoire.list();
         return listefichiers;
-}
+    }
 }
