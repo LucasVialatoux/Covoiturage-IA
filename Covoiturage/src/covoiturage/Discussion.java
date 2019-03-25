@@ -175,24 +175,6 @@ public class Discussion {
         }
     }
     
-    //Création des préférences du voyageur pour ce voyage
-    public ArrayList <String> initPreferenceVoyageur(){
-        ArrayList <String> tabV;
-        tabV = new ArrayList();
-        
-        
-        
-        return tabV;
-    }
-    
-    //Création des préférences du conducteur pour ce voyage
-    public ArrayList <String> initPreferenceConducteur(){
-        ArrayList <String> tabC;
-        tabC = new ArrayList();
-        
-        return tabC;
-    }
-
     /**
      * @return the prix
      */
