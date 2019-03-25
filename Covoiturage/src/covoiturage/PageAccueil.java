@@ -1,4 +1,5 @@
 package covoiturage;
+import javafx.scene.input.KeyEvent;
 import javafx.geometry.Insets;
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +10,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -35,6 +38,7 @@ public class PageAccueil{
     public Pane root;
     public Platform platform;
     public boolean userEmpty, mdpEmpty;
+    public Button btnConnexion;
     
     
 
@@ -54,7 +58,7 @@ public class PageAccueil{
         t1.setFill(Color.RED);
         user = new TextField ();
         mdp = new PasswordField();
-        Button btnConnexion = new Button();
+        btnConnexion = new Button();
         btnConnexion.setText("Connexion");
         btnConnexion.setOnAction(new Connexion(this));
         Button btnInscription = new Button();
@@ -84,6 +88,7 @@ public class PageAccueil{
                             });
         root.getChildren().add(grid);
         Scene scene = new Scene(root, 1200, 675);
+        scene.addEventFilter(KeyEvent.KEY_PRESSED,new ActionEntree(this));
         stage.setTitle("Covoiturage"); 
         stage.setScene(scene);
         stage.show();
@@ -108,6 +113,25 @@ public class PageAccueil{
             btnConnexion.setDisable(false);
         } else {
             btnConnexion.setDisable(true);
+        }
+    }
+    public class ActionEntree implements EventHandler<KeyEvent>{
+        public PageAccueil p;
+        public boolean b;
+        public ActionEntree(PageAccueil p){
+            this.p=p;
+            this.b=false;
+        }
+        @Override
+          public void handle(KeyEvent e) {
+              if(e.getCode() == KeyCode.ENTER && !this.p.btnConnexion.isDisable()&&b==true){
+                  b=false;
+                  Connexion c=new Connexion(this.p);
+                  ActionEvent event = null;
+                  c.handle(event);
+              }else{
+                  b=true;
+              }
         }
     }
 }
