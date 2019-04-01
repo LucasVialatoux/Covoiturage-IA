@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package covoiturage;
 
 import java.io.FileNotFoundException;
@@ -22,10 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-/**
- *
- * @author lucas
- */
 public class PageRecherche extends Fenetre{
     public DatePicker Date;
     public TextField Depart;
@@ -105,7 +96,10 @@ public class PageRecherche extends Fenetre{
             Utilisateur conducteur = this.utilisateurRandom();
             //random entre 10 et 1000 compris
             int prixRnd=  (int)(Math.random() * ((1000-10) + 1));
-            Discussion disc = new Discussion(this.util,conducteur,prixRnd,depart+'-'+arrivee,date.toString());
+            
+            Voyage voyage = new Voyage(3,depart,arrivee);
+            Discussion disc = new Discussion(this.util,conducteur,prixRnd,voyage,date.toString());
+            
             stage.close();
             disc.conversation();
             new PageMessage(this.util,disc);

@@ -8,7 +8,6 @@ package covoiturage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -25,40 +24,25 @@ public class Discussion {
     private Utilisateur conducteur;
     private String nomconducteur;
     private int prix;
-    private String voyage;
-    private String date;
-    private String dateNomF;
+    private Voyage voyage;
             
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date,String dateN){
-        this.voyageur=user1;
-        this.nomvoyageur=this.voyageur.nom;
-        this.conducteur=user2;
-        this.nomconducteur=this.conducteur.nom;
-        this.prix=prix;
-        this.dateNomF=dateN;
-        this.voyage=voyage;
-        this.date=date;
-    }
-    
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix,String voyage,String date){
+    public Discussion(Utilisateur user1,Utilisateur user2, int prix, Voyage voyage,String date){
         this.voyageur=user1;
         this.nomvoyageur=this.voyageur.nom;
         this.conducteur=user2;
         this.nomconducteur=this.conducteur.nom;
         this.prix=prix;
         this.voyage=voyage;
-        this.date=date;
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.getPrix()+"#"+this.getVoyage()+"#"+this.getDate()+"#\n";
+        String ajout=this.prix+"#"+this.voyage.getVilleArrivee()+"#"+this.voyage.getVilleDepart()+"#"+this.voyage.getDate()+"#\n";
         for(String s : messages){
             ajout+=s+";\n";
         }
- 
-        String dateTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-        String path = "messages/"+this.getVoyageur().id+"-"+this.getConducteur().id+"-"+dateTime+".txt";
-        this.dateNomF=dateTime+".txt";
+        
+        String path = "messages/"+this.getVoyageur().id+"-"+this.getConducteur().id+"-"+this.voyage.getId()+".txt";
+        
         FileWriter fw = new FileWriter(path,true);
         fw.write(ajout);
         fw.close();
@@ -66,7 +50,7 @@ public class Discussion {
     
     public ArrayList<String> recupererConversation() throws IOException{
         File f = new File("messages/.");    
-        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.dateNomF;
+        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.voyage.getId();
         final Pattern p = Pattern.compile(pattern);
         File[] pagesTemplates;
         pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
@@ -88,7 +72,7 @@ public class Discussion {
     
     @Override
     public String toString(){
-        return this.getPrix()+" "+this.getVoyage()+" "+this.getDate();
+        return this.getPrix()+" "+this.getVoyage()+" "+this.voyage.getId();
     }
     
     public void conversation() throws IOException{
@@ -175,25 +159,17 @@ public class Discussion {
         }
     }
     
-    /**
-     * @return the prix
-     */
     public int getPrix() {
         return prix;
     }
 
-    /**
-     * @return the voyage
-     */
+    
     public String getVoyage() {
-        return voyage;
+        return this.voyage.getVilleArrivee() + "-" + this.voyage.getVilleDepart();
     }
-
-    /**
-     * @return the date
-     */
+    
     public String getDate() {
-        return date;
+        return this.voyage.getDate();
     }
 
     public Utilisateur getVoyageur() {

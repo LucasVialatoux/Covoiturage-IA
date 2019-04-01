@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static java.lang.System.console;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -26,7 +25,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 /**
  *

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package covoiturage;
 
 import java.io.File;
@@ -21,10 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
-/**
- *
- * @author antoine dulhoste
- */
 public class PageAccueilUtil extends Fenetre {
 
     public PageAccueilUtil(Utilisateur util) throws FileNotFoundException {
@@ -130,7 +121,9 @@ public class PageAccueilUtil extends Fenetre {
         String[] discussion = scan.split("#");
         Utilisateur util1 = this.trouverUtil(parts[0]);
         Utilisateur util2 = this.trouverUtil(parts[1]);
-        Discussion dis = new Discussion(util1, util2, Integer.parseInt(discussion[0]), discussion[1], discussion[2], parts[2]);
+        Voyage voyage = new Voyage(3,discussion[1], discussion[2]);
+        
+        Discussion dis = new Discussion(util1, util2, Integer.parseInt(discussion[0]), voyage, discussion[3]);
         return dis;
     }
     
