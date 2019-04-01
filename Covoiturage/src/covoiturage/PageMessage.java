@@ -5,13 +5,18 @@
  */
 package covoiturage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import static javafx.geometry.HPos.LEFT;
 import static javafx.geometry.HPos.RIGHT;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -68,6 +73,19 @@ public class PageMessage extends Fenetre{
             msg.setPadding(new Insets(10, 10, 10, 10));
             index++;
         });
+        
+        Button retour = new Button("Retour");
+        retour.setOnAction((ActionEvent t) -> {
+            stage.close();
+            try {
+                new PageAccueilUtil(user);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PageMessage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        GridPane.setHalignment(retour,RIGHT);
+        GridPane.setMargin(retour, new Insets(20, 0, 0, 0));
+        grid.add(retour,1,index);
         
         grid.setVgap(4);
         grid.setHgap(10);
