@@ -6,6 +6,8 @@
 package covoiturage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +72,26 @@ public class Discussion {
         return str;
     }
     
+    public ArrayList<String> recupererPreference(boolean estConducteur) throws FileNotFoundException{
+        File f = new File("preference/.");
+        String pattern;
+        if (estConducteur){
+            pattern = this.conducteur.id+"";
+        } else {
+            pattern = this.voyageur.id+"";
+        }
+        ArrayList<String> str2=new ArrayList();
+        Scanner scanner = new Scanner(new FileReader(pattern+".txt"));
+        while (scanner.hasNextLine()) {
+            String utili=scanner.nextLine();
+            String[] parts = utili.split(";");
+            for(String x:parts){
+                str2.add(x);
+            }
+        }
+        return str2;
+    }
+    
     @Override
     public String toString(){
         return this.getPrix()+" "+this.getVoyage()+" "+this.voyage.getId();
@@ -78,6 +100,17 @@ public class Discussion {
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
         boolean estUtilisateur = false;
+        //Tableaux des préférences de l'utilisateur et du conducteur
+        ArrayList <String> tabPrefUtilisateur;
+        ArrayList <String> tabPrefConducteur;
+        
+        tabPrefUtilisateur = recupererPreference(false);
+        tabPrefConducteur = recupererPreference(true);
+        System.out.println("tabPrefUtilisateur : "+tabPrefUtilisateur);
+        System.out.println("tabPrefConducteur : "+tabPrefConducteur);
+        
+        
+        
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
@@ -87,6 +120,21 @@ public class Discussion {
         int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
         int nbreUtil = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
         String newMessage;
+        if (tabPrefConducteur.size()>0){
+            newMessage = "Le conducteur indique que son voyage ";
+            for (int i=0;i<tabPrefConducteur.size();i++){
+                if (i>0){
+                    newMessage+=  ",";
+                }
+                if(tabPrefConducteur.get(i)=="Fumeur"){
+                    newMessage+=  "est Fumeur";
+                } else {
+                    newMessage+=  "accepte les "+tabPrefConducteur.get(i);
+                }
+            }
+            messages.add(newMessage);
+        }
+        
         newMessage = "L'utilisateur propose "+nbreUtil+"€";
         messages.add(newMessage);
         boolean discussionFini = false;

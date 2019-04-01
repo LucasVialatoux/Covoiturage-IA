@@ -34,9 +34,6 @@ public class PageUtilisateur{
     public TextField fieldLastName;
     public TextField fieldFirstName;
     public TextField fieldEmail;
-    public CheckBox fieldFumeur;
-    public CheckBox fieldAnimaux;
-    public CheckBox fieldEnfants;
     public PasswordField fieldPassword;
     public Stage stage;
     public BorderPane root;
@@ -72,15 +69,6 @@ public class PageUtilisateur{
         Label labelPassword = new Label("Mot de passe :");
         fieldPassword = new PasswordField();
         
-        Label labelFumeur = new Label("Êtes-vous fumeur ? ");
-        fieldFumeur = new CheckBox("Oui");
-        
-        Label labelAnimaux = new Label("Voyagez-vous avec vos animaux ? ");
-        fieldAnimaux = new CheckBox("Oui");
-        
-        Label labelEnfants = new Label("Avez-vous des enfants ? ");
-        fieldEnfants = new CheckBox("Oui");
-        
         Button createButton = new Button("Créer");
         createButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
@@ -112,17 +100,8 @@ public class PageUtilisateur{
        GridPane.setHalignment(labelEmail, HPos.RIGHT);
        grid.add(labelEmail, 0, 3);
        
-       GridPane.setHalignment(labelFumeur, HPos.RIGHT);
-       grid.add(labelFumeur, 0, 4);
-       
-       GridPane.setHalignment(labelAnimaux, HPos.RIGHT);
-       grid.add(labelAnimaux, 0, 5);
-       
-       GridPane.setHalignment(labelEnfants, HPos.RIGHT);
-       grid.add(labelEnfants, 0, 6);
-       
        GridPane.setHalignment(labelPassword, HPos.RIGHT);
-       grid.add(labelPassword, 0, 7);
+       grid.add(labelPassword, 0, 4);
  
        // Horizontal alignment for last Name field.
        GridPane.setHalignment(fieldLastName, HPos.LEFT);
@@ -135,30 +114,18 @@ public class PageUtilisateur{
        // Horizontal alignment for e-mail field.
        GridPane.setHalignment(fieldEmail, HPos.LEFT);
        grid.add(fieldEmail, 1, 3);
- 
-       // Horizontal alignment for fumeur field.
-       GridPane.setHalignment(fieldFumeur, HPos.LEFT);
-       grid.add(fieldFumeur, 1, 4);
-       
-       // Horizontal alignment for Animaux field.
-       GridPane.setHalignment(fieldAnimaux, HPos.LEFT);
-       grid.add(fieldAnimaux, 1, 5);
-       
-       // Horizontal alignment for Enfants field.
-       GridPane.setHalignment(fieldEnfants, HPos.LEFT);
-       grid.add(fieldEnfants, 1, 6);
        
        // Horizontal alignment for password field.
        GridPane.setHalignment(fieldPassword, HPos.LEFT);
-       grid.add(fieldPassword, 1, 7);
+       grid.add(fieldPassword, 1, 4);
         
        // Horizontal alignment for create button.
        GridPane.setHalignment(createButton, HPos.RIGHT);
-       grid.add(createButton, 1, 8);
+       grid.add(createButton, 1, 5);
        
        // Horizontal alignment for back button.
        GridPane.setHalignment(backButton, HPos.LEFT);
-       grid.add(backButton, 1, 8);
+       grid.add(backButton, 1, 5);
 
        grid.setVgap(4);
        grid.setHgap(10);
@@ -172,9 +139,6 @@ public class PageUtilisateur{
         String firstName = fieldFirstName.getText();
         String email = fieldEmail.getText();
         String pwd = fieldPassword.getText();
-        boolean fumeur = fieldFumeur.isSelected();
-        boolean animaux = fieldAnimaux.isSelected();
-        boolean enfants = fieldEnfants.isSelected();
         
         if (lastName.isEmpty() || firstName.isEmpty()
                 || email.isEmpty() || pwd.isEmpty() || userExist(email)){
@@ -187,23 +151,7 @@ public class PageUtilisateur{
         } else {
             ArrayList<Integer> tabPref = new ArrayList(10);
             Utilisateur u = new Utilisateur(lastID(),lastName,firstName,pwd,false,email);
-            if (fumeur){
-                tabPref.set(0,1);
-            } else {
-                tabPref.set(0,0);
-            }
-            if (animaux){
-                tabPref.set(1,1);
-            } else {
-                tabPref.set(1,0);
-            }
-            if (enfants){
-                tabPref.set(2,1);
-            } else {
-                tabPref.set(2,0);
-            }
             u.creerUtil();
-            u.creerPrefUtil(tabPref);
             boiteDeDialogueI();
             return true; 
         }

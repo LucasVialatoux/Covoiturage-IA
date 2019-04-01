@@ -20,7 +20,6 @@ public class Utilisateur {
     public String mdp;
     public boolean estAdmin; //false:utilisteur true:admin
     public String email;
-    public ArrayList<Integer> tabPref;
     
     public Utilisateur(int id,String nom,String prenom,String mdp,boolean estAdmin,String email){
         this.id=id;
@@ -36,18 +35,27 @@ public class Utilisateur {
         FileWriter fw = new FileWriter("utilisateur.txt",true);
         fw.write(ajout);
         fw.close();
+        creerPrefUtil();
     }
     @Override
     public String toString(){
         return "id:"+this.id+" nom:"+this.nom+" prenom:"+this.prenom+" mdp:"+this.mdp+" estAdmin"+this.estAdmin+" email:"+this.email;
     }
     
-    public void creerPrefUtil(ArrayList<Integer> tabPref) throws IOException{
+    public void creerPrefUtil() throws IOException{
+        Preference pref = new Preference();
         String preference="";
-        for(int i=0;i<tabPref.size();i++){
-            preference+=tabPref.get(i)+";";
+        ArrayList<String> prefExistante = pref.getPreferenceExistante();
+        int nbPrefRandom = (int)(Math.random() * (pref.nbPref()+1));
+        for(int i=0;i<nbPrefRandom;i++){
+            int nbEnleve = pref.getPref();
+            if(nbEnleve<prefExistante.size()){
+                preference+=prefExistante.get(nbEnleve)+";";
+                prefExistante.remove(nbEnleve);
+            }
+            
         }
-        FileWriter fw = new FileWriter("preference/."+this.id+".txt",true);
+        FileWriter fw = new FileWriter("preference/"+this.id+".txt",true);
         fw.write(preference);
         fw.close();
     }
