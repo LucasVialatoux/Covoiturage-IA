@@ -7,6 +7,7 @@ package covoiturage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -87,23 +88,21 @@ public class Discussion {
         return str;
     }
     
-    public ArrayList<String> recupererPreference() throws FileNotFoundException{
+    public ArrayList<String> recupererPreference(boolean estConducteur) throws FileNotFoundException{
         File f = new File("preference/.");
-        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.dateNomF;
-        final Pattern p = Pattern.compile(pattern);
-        File[] pagesTemplates;
-        pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
-        f=pagesTemplates[0];
-        
+        String pattern;
+        if (estConducteur){
+            pattern = this.conducteur.id+"";
+        } else {
+            pattern = this.voyageur.id+"";
+        }
         ArrayList<String> str2=new ArrayList();
-        if(f.exists() && !f.isDirectory()) { 
-            Scanner sc = new Scanner(f);
-            while(sc.hasNextLine()){
-                String temp = sc.nextLine();
-                if(!";".equals(temp.substring(temp.length() - 1))){
-                    temp=temp.substring(0,temp.length() - 1);
-                    str2.add(temp);
-                }                    
+        Scanner scanner = new Scanner(new FileReader(pattern+".txt"));
+        while (scanner.hasNextLine()) {
+            String utili=scanner.nextLine();
+            String[] parts = utili.split(";");
+            for(String x:parts){
+                str2.add(x);
             }
         }
         return str2;
@@ -121,6 +120,11 @@ public class Discussion {
         ArrayList <String> tabPrefUtilisateur;
         ArrayList <String> tabPrefConducteur;
         
+        tabPrefUtilisateur = recupererPreference(false);
+        tabPrefConducteur = recupererPreference(true);
+        System.out.println("tabPrefUtilisateur : "+tabPrefUtilisateur);
+        System.out.println("tabPrefConducteur : "+tabPrefConducteur);
+        
         
         
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
@@ -132,6 +136,21 @@ public class Discussion {
         int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
         int nbreUtil = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
         String newMessage;
+        if (tabPrefConducteur.size()>0){
+            newMessage = "Le conducteur indique que son voyage ";
+            for (int i=0;i<tabPrefConducteur.size();i++){
+                if (i>0){
+                    newMessage+=  ",";
+                }
+                if(tabPrefConducteur.get(i)=="Fumeur"){
+                    newMessage+=  "est Fumeur";
+                } else {
+                    newMessage+=  "accepte les "+tabPrefConducteur.get(i);
+                }
+            }
+            messages.add(newMessage);
+        }
+        
         newMessage = "L'utilisateur propose "+nbreUtil+"€";
         messages.add(newMessage);
         boolean discussionFini = false;

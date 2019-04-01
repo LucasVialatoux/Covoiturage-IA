@@ -58,8 +58,6 @@ public class Utilisateur {
             }
             
         }
-        System.out.println(nbPrefRandom);
-        System.out.println(preference);
         FileWriter fw = new FileWriter("preference/"+this.id+".txt",true);
         fw.write(preference);
         fw.close();
