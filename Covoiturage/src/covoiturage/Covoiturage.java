@@ -17,6 +17,7 @@ public class Covoiturage extends Application {
     @Override
     public void start(Stage primaryStage){
         PageAccueil pageAccueil = new PageAccueil();
+        //Utilisateur u1 = new Utilisateur(50,"Nom","prenom","mdp",false,"a");
     }
     /**
      * @param args the command line arguments

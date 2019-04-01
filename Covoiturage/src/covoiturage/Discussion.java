@@ -6,6 +6,7 @@
 package covoiturage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -86,6 +87,28 @@ public class Discussion {
         return str;
     }
     
+    public ArrayList<String> recupererPreference() throws FileNotFoundException{
+        File f = new File("preference/.");
+        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.dateNomF;
+        final Pattern p = Pattern.compile(pattern);
+        File[] pagesTemplates;
+        pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
+        f=pagesTemplates[0];
+        
+        ArrayList<String> str2=new ArrayList();
+        if(f.exists() && !f.isDirectory()) { 
+            Scanner sc = new Scanner(f);
+            while(sc.hasNextLine()){
+                String temp = sc.nextLine();
+                if(!";".equals(temp.substring(temp.length() - 1))){
+                    temp=temp.substring(0,temp.length() - 1);
+                    str2.add(temp);
+                }                    
+            }
+        }
+        return str2;
+    }
+    
     @Override
     public String toString(){
         return this.getPrix()+" "+this.getVoyage()+" "+this.getDate();
@@ -94,6 +117,12 @@ public class Discussion {
     public void conversation() throws IOException{
         ArrayList messages = new ArrayList<>();
         boolean estUtilisateur = false;
+        //Tableaux des préférences de l'utilisateur et du conducteur
+        ArrayList <String> tabPrefUtilisateur;
+        ArrayList <String> tabPrefConducteur;
+        
+        
+        
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
