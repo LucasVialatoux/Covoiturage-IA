@@ -64,6 +64,7 @@ public class Discussion {
                 }                    
             }
         }
+        System.out.println("str : "+str);
         return str;
     }
     
@@ -119,8 +120,16 @@ public class Discussion {
         messages.add(newMessage);
         boolean CEstFumeur = false;
         boolean UEstFumeur = false;
+        boolean CEstAnimaux = false;
+        boolean CEstEnfants = false;
+        boolean UEstAnimaux = false;
+        boolean UEstEnfants = false;
         boolean discussionFini = false;
         boolean tombentDaccord = false;
+        boolean poserQuestion = false;
+        //
+        //Affichage des préférences Conducteur
+        //
         if (tabPrefConducteur.size()>0){
             newMessage = "Le conducteur indique que son voyage ";
             for (int i=0;i<tabPrefConducteur.size();i++){
@@ -131,11 +140,21 @@ public class Discussion {
                     newMessage+=  "est Fumeur";
                     CEstFumeur = true;
                 } else {
+                    if(tabPrefConducteur.get(i).equals("Enfants")){
+                        CEstEnfants = true;
+                    }
+                    if(tabPrefConducteur.get(i).equals("Animaux")){
+                        CEstAnimaux = true;
+                    }
                     newMessage+=  "accepte les "+tabPrefConducteur.get(i);
                 }
             }
             messages.add(newMessage);
         }
+        
+        //
+        //Affichage des préférences Utilisateur
+        //
         if(tabPrefUtilisateur.size()>0){
             newMessage="L'utilisateur indique que ces préférences sont : ";
              for (int i=0;i<tabPrefUtilisateur.size();i++){
@@ -158,8 +177,19 @@ public class Discussion {
                             discussionFini = true;
                         }
                     }
+                } else if(tabPrefUtilisateur.get(i).equals("Animaux")){
+                    UEstAnimaux = true;
+                    if (!CEstAnimaux){
+                        newMessage+="Demande au conducteur si il accepte les animaux";
+                        poserQuestion = true;
+                    }
+                //Enfants
                 } else {
-                    newMessage+=tabPrefUtilisateur.get(i);
+                    UEstEnfants = true;
+                    if (!CEstEnfants){
+                        newMessage+="Demande au conducteur si il accepte les enfants";
+                        poserQuestion = true;
+                    }
                 }
             }
             if (!UEstFumeur && CEstFumeur ){
@@ -174,8 +204,59 @@ public class Discussion {
                     discussionFini = true;
                 }
             }
+            if (CEstAnimaux && !UEstAnimaux){
+                int rndAccepte = negociationPrix(0,1);
+                //Accepte de voyager
+                if (rndAccepte == 1){
+                    newMessage+=  " et accepte un voyage avec des animaux";
+                //N'accepte pas
+                } else {
+                    newMessage+=  " et n'accepte pas de voyage avec des animaux";
+                    discussionFini = true;
+                }
+            }
+            if (CEstEnfants && !UEstEnfants){
+                int rndAccepte = negociationPrix(0,1);
+                //Accepte de voyager
+                if (rndAccepte == 1){
+                    newMessage+=  " et accepte un voyage avec des enfants";
+                //N'accepte pas
+                } else {
+                    newMessage+=  " et n'accepte pas de voyage avec des enfants";
+                    discussionFini = true;
+                }
+            }
+            if (poserQuestion)
             messages.add(newMessage);
         }
+        if (!discussionFini && poserQuestion){
+            newMessage="";
+            if(UEstEnfants){
+                int rndAccepte = negociationPrix(0,1);
+                //Accepte de voyager
+                if (rndAccepte == 1){
+                    newMessage+=  " Le conducteur tolère les enfants";
+                //N'accepte pas
+                } else {
+                    newMessage+=  " Le conducteur n'accepte pas de voyager avec des enfants";
+                    discussionFini = true;
+                }
+            }
+            if(UEstAnimaux){
+                int rndAccepte = negociationPrix(0,1);
+                //Accepte de voyager
+                if (rndAccepte == 1){
+                    newMessage+=  " Le conducteur tolère les animaux";
+                //N'accepte pas
+                } else {
+                    newMessage+=  " Le conducteur n'accepte pas de voyager avec des animaux";
+                    discussionFini = true;
+                }
+            }
+            messages.add(newMessage);
+        }
+        
+        //Première proposition
         if (!discussionFini){
             newMessage = "L'utilisateur propose "+nbreUtil+"€";
             messages.add(newMessage);
@@ -188,6 +269,9 @@ public class Discussion {
         int compteur =1;
         int prixC = 0;
         int prixUtil = 0;
+        //
+        //Négociation du prix
+        //
         while (!discussionFini){
             //Utilisateur
             if (estUtilisateur){
@@ -241,6 +325,7 @@ public class Discussion {
         }
         enregisterConversation(messages);
     }
+    
     
     public int negociationPrix(int min,int max){
         int rndNumber = min + (int)(Math.random() * ((max - min) + 1));

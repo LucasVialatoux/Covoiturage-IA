@@ -1,0 +1,5 @@
+692#t#t#02/04/2019#
+L'utilisateur souhaite voyager;
+Le conducteur indique que son voyage est Fumeur;
+L'utilisateur indique que ces préférences sont : Demande au conducteur si il accepte les animaux,Demande au conducteur si il accepte les enfantsn'est pas Fumeur et accepte de voyager dans un voyage fumeur;
+ Le conducteur tolère les enfants Le conducteur n'accepte pas de voyager avec des animaux;
