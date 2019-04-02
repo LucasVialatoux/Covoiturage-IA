@@ -118,7 +118,9 @@ public class Discussion {
         newMessage="L'utilisateur souhaite voyager";
         messages.add(newMessage);
         boolean CEstFumeur = false;
+        boolean UEstFumeur = false;
         boolean discussionFini = false;
+        boolean tombentDaccord = false;
         if (tabPrefConducteur.size()>0){
             newMessage = "Le conducteur indique que son voyage ";
             for (int i=0;i<tabPrefConducteur.size();i++){
@@ -142,6 +144,7 @@ public class Discussion {
                 }
                 if(tabPrefUtilisateur.get(i).equals("Fumeur")){
                     newMessage+=  "est Fumeur";
+                    UEstFumeur = true;
                     //Si conducteur est non fumeur
                     if (!CEstFumeur){
                         //Random pour savoir si il accepte de voyager avec un coducteur qui ne fume pas
@@ -149,14 +152,26 @@ public class Discussion {
                         //Accepte de voyager
                         if (rndAccepte == 1){
                             newMessage+=  " et accepte de voyager dans un voyage non fumeur";
+                        //N'accepte pas
                         } else {
                             newMessage+=  " et n'accepte pas de voyager dans un voyage non fumeur";
                             discussionFini = true;
                         }
                     }
-                    
                 } else {
                     newMessage+=tabPrefUtilisateur.get(i);
+                }
+            }
+            if (!UEstFumeur && CEstFumeur ){
+                newMessage+=  "n'est pas Fumeur";
+                int rndAccepte = negociationPrix(0,1);
+                //Accepte de voyager
+                if (rndAccepte == 1){
+                    newMessage+=  " et accepte de voyager dans un voyage fumeur";
+                //N'accepte pas
+                } else {
+                    newMessage+=  " et n'accepte pas de voyager dans un voyage fumeur";
+                    discussionFini = true;
                 }
             }
             messages.add(newMessage);
@@ -182,6 +197,7 @@ public class Discussion {
                 }else if (nbreNegocie<=prixMaxUtilisateur){
                     newMessage="Utilisateur ok pour "+nbreNegocie+"€";
                     discussionFini = true;
+                    tombentDaccord = true;
                 } else {
                     if (nbreUtil == prixMaxUtilisateur){
                         prixUtil++;
@@ -199,6 +215,7 @@ public class Discussion {
                 }else if (nbreUtil>=prixMinConducteur){
                     newMessage="Conducteur ok pour "+nbreUtil+"€";
                     discussionFini = true;
+                    tombentDaccord = true;
                 } else {
                     //1ère itération
                     if (premierIteration){
@@ -225,8 +242,6 @@ public class Discussion {
         enregisterConversation(messages);
     }
     
-    //typePersonne == 0 : Utilisateur (veut descendre le prix
-    //typePersonne == 1 : Conducteur (ne veut pas trop descendre le prix)
     public int negociationPrix(int min,int max){
         int rndNumber = min + (int)(Math.random() * ((max - min) + 1));
         if(rndNumber<=0){
