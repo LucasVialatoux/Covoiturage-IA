@@ -83,7 +83,7 @@ public class PageProposerVoyage extends Fenetre{
 
         searchButton.setOnAction((ActionEvent t) -> {
             try {
-                recherche();
+                proposer();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(PageRecherche.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -97,10 +97,12 @@ public class PageProposerVoyage extends Fenetre{
         root.setCenter(grid);
     }
 
-    public void recherche() throws FileNotFoundException, IOException{
+    public void proposer() throws FileNotFoundException, IOException{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
+        int prix = Prix.getValue();
+        int nbPlace = NbPlace.getValue();
         
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
@@ -120,8 +122,8 @@ public class PageProposerVoyage extends Fenetre{
             voyage.sauvegardeVoyage();
             disc.conversation();
             new PageMessage(this.util,disc);
+        }
     }
-    
     //info=1 : Tout vide
     //info=2 : Pas de départ ni d'arrivée
     //info=3 : pas de date
