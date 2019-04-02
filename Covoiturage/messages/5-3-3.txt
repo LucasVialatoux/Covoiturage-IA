@@ -1,0 +1,14 @@
+370#c#c#02/04/2019#
+L'utilisateur propose 316€;
+Conducteur propose 343€;
+Utilisateur propose 325€;
+Conducteur propose 340€;
+Utilisateur propose 325€;
+Conducteur propose 339€;
+Utilisateur propose 329€;
+Conducteur propose 339€;
+Utilisateur propose 330€;
+Conducteur propose 339€;
+Utilisateur propose 330€;
+Conducteur propose 337€;
+Utilisateur ne montera pas au dessus de 330€;

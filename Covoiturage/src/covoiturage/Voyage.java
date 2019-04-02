@@ -24,47 +24,53 @@ public class Voyage {
         this.villeArrivee = VilleArrivee;
         this.nbpassagers = 0;
         this.id = recupId();
+        
+        System.out.println(this.id);
         this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-        sauvegardeVoyage();
     }
 
     
-    private void sauvegardeVoyage() {
-        String ajout=this.nbplaces +"\n";
-        ajout+=this.nbpassagers+"\n";
-        ajout+=this.date+"\n";
-        ajout+=this.villeDepart+"\n";
-        ajout+=this.villeArrivee+"\n";
+    public void sauvegardeVoyage() {
+        
+        String ajout=this.nbplaces +";\n";
+        ajout+=this.nbpassagers+";\n";
+        ajout+=this.date+";\n";
+        ajout+=this.villeDepart+";\n";
+        ajout+=this.villeArrivee+";\n";
         
         String path = "voyages/"+this.id+".txt";
         
         FileWriter fw;
-            try {
-                fw = new FileWriter(path,true);
-                fw.write(ajout);
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            fw = new FileWriter(path,true);
+            fw.write(ajout);
+            fw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public boolean estPlein(){
+        return this.nbplaces == this.nbpassagers;
     }
     
     public void ajouterPassagers(){
-        if(this.nbpassagers < this.nbplaces){
+        if(this.estPlein()){
             this.nbpassagers++;
         }
     }
     
     private int recupId() {
-        int newid=1;
+        int newid=0;
         int temp;
         File folder = new File("voyages/.");
         for (final File fileEntry : folder.listFiles()) {
-            temp = Integer.parseInt(fileEntry.getName());
-            if(newid>temp);
+            String name=fileEntry.getName();
+            temp = Integer.parseInt(name.substring(0, 1));
+            if(newid<temp)
                 newid=temp;
         }
-        System.out.println(newid);
+        newid++;
         return newid;
     }
 

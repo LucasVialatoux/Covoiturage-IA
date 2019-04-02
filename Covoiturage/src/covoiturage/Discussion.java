@@ -11,9 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -51,12 +49,9 @@ public class Discussion {
     }
     
     public ArrayList<String> recupererConversation() throws IOException{
-        File f = new File("messages/.");    
-        String pattern = this.voyageur.id+"-"+this.conducteur.id+"-"+this.voyage.getId();
-        final Pattern p = Pattern.compile(pattern);
-        File[] pagesTemplates;
-        pagesTemplates = f.listFiles((File f1) -> p.matcher(f1.getName()).matches());
-        f=pagesTemplates[0];
+        String path = this.voyageur.id+"-"+this.conducteur.id+"-"+this.voyage.getId();
+        
+        File f = new File("messages/"+path);
         
         ArrayList<String> str=new ArrayList();
         if(f.exists() && !f.isDirectory()) { 
@@ -73,7 +68,6 @@ public class Discussion {
     }
     
     public ArrayList<String> recupererPreference(boolean estConducteur) throws FileNotFoundException{
-        File f = new File("preference/.");
         String pattern;
         if (estConducteur){
             pattern = this.conducteur.id+"";
@@ -81,7 +75,7 @@ public class Discussion {
             pattern = this.voyageur.id+"";
         }
         ArrayList<String> str2=new ArrayList();
-        Scanner scanner = new Scanner(new FileReader(pattern+".txt"));
+        Scanner scanner = new Scanner(new FileReader("preference/"+pattern+".txt"));
         while (scanner.hasNextLine()) {
             String utili=scanner.nextLine();
             String[] parts = utili.split(";");

@@ -1,4 +1,0 @@
-35#test-test#2019-03-13#
-L'utilisateur propose 22€;
-Conducteur propose 27€;
-Utilisateur ok pour 27€;

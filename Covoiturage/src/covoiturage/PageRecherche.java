@@ -101,6 +101,7 @@ public class PageRecherche extends Fenetre{
             Discussion disc = new Discussion(this.util,conducteur,prixRnd,voyage,date.toString());
             
             stage.close();
+            voyage.sauvegardeVoyage();
             disc.conversation();
             new PageMessage(this.util,disc);
         }
