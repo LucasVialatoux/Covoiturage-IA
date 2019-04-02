@@ -101,8 +101,6 @@ public class PageProposerVoyage extends Fenetre{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
-        int prix = Prix.getValue();
-        int nbPlace = NbPlace.getValue();
         
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
