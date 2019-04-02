@@ -100,11 +100,12 @@ public class Discussion {
         
         tabPrefUtilisateur = recupererPreference(false);
         tabPrefConducteur = recupererPreference(true);
-        System.out.println("tabPrefUtilisateur : "+tabPrefUtilisateur);
-        System.out.println("tabPrefConducteur : "+tabPrefConducteur);
-        
-        
-        
+        for (String s : tabPrefUtilisateur){
+            System.out.println("tabPrefUtilisateur : "+s);
+        }
+        for (String s : tabPrefConducteur){
+            System.out.println("tabPrefConducteur : "+s);
+        }
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
@@ -114,24 +115,58 @@ public class Discussion {
         int prixMinConducteur = (this.prix)-(this.prix*pourcentageRnd/100);
         int nbreUtil = negociationPrix(prixUtilActuel,prixMaxUtilisateur);
         String newMessage;
+        newMessage="L'utilisateur souhaite voyager";
+        messages.add(newMessage);
+        boolean CEstFumeur = false;
+        boolean discussionFini = false;
         if (tabPrefConducteur.size()>0){
             newMessage = "Le conducteur indique que son voyage ";
             for (int i=0;i<tabPrefConducteur.size();i++){
                 if (i>0){
                     newMessage+=  ",";
                 }
-                if(tabPrefConducteur.get(i)=="Fumeur"){
+                if(tabPrefConducteur.get(i).equals("Fumeur")){
                     newMessage+=  "est Fumeur";
+                    CEstFumeur = true;
                 } else {
                     newMessage+=  "accepte les "+tabPrefConducteur.get(i);
                 }
             }
             messages.add(newMessage);
         }
+        if(tabPrefUtilisateur.size()>0){
+            newMessage="L'utilisateur indique que ces préférences sont : ";
+             for (int i=0;i<tabPrefUtilisateur.size();i++){
+                if (i>0){
+                    newMessage+=  ",";
+                }
+                if(tabPrefUtilisateur.get(i).equals("Fumeur")){
+                    newMessage+=  "est Fumeur";
+                    //Si conducteur est non fumeur
+                    if (!CEstFumeur){
+                        //Random pour savoir si il accepte de voyager avec un coducteur qui ne fume pas
+                        int rndAccepte = negociationPrix(0,1);
+                        //Accepte de voyager
+                        if (rndAccepte == 1){
+                            newMessage+=  " et accepte de voyager dans un voyage non fumeur";
+                        } else {
+                            newMessage+=  " et n'accepte pas de voyager dans un voyage non fumeur";
+                            discussionFini = true;
+                        }
+                    }
+                    
+                } else {
+                    newMessage+=tabPrefUtilisateur.get(i);
+                }
+            }
+            messages.add(newMessage);
+        }
+        if (!discussionFini){
+            newMessage = "L'utilisateur propose "+nbreUtil+"€";
+            messages.add(newMessage);
+        }
         
-        newMessage = "L'utilisateur propose "+nbreUtil+"€";
-        messages.add(newMessage);
-        boolean discussionFini = false;
+        
         boolean premierIteration = true;
         //Début Négociation
         int nbreNegocie=0;
