@@ -1,6 +1,0 @@
-278#test#lyon#02/04/2019#
-L'utilisateur souhaite voyager;
-Le conducteur indique que son voyage accepte les Enfants;
-L'utilisateur propose 208€;
-Conducteur propose 247€;
-Utilisateur ok pour 247€;
