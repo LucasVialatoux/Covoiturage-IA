@@ -48,22 +48,33 @@ public abstract class Fenetre  {
     
     public void menu(){
         MenuBar mainMenu = new MenuBar();  
+        
         Menu application = new Menu("Application");
+        Menu mesVoyages = new Menu("Mes voyages");
+        Menu aide = new Menu("Aide");
+        
         MenuItem quitter = new MenuItem("Quitter");
         quitter.setOnAction(new ChangeMenu(this.util,99));
+        
         MenuItem deco = new MenuItem("Se deconnecter");
-        application.getItems().setAll(deco,quitter);
         deco.setOnAction(new ChangeMenu(this.util,1));
-        Menu aide = new Menu("Aide");
         aide.setOnAction(new ChangeMenu(this.util,2));
+        
         MenuItem about = new MenuItem("A propos");
-        aide.getItems().setAll(about);
-        Menu mesVoyages = new Menu("Mes voyages");
+        
         MenuItem accueil = new MenuItem("Accueil");
         accueil.setOnAction(new ChangeMenu(this.util,3));
+        
         MenuItem cherV = new MenuItem("Chercher un voyage");
         cherV.setOnAction(new ChangeMenu(this.util,5));
-        mesVoyages.getItems().setAll(accueil,cherV);
+        
+        
+        MenuItem proposeV = new MenuItem("Proposer un voyage");
+        proposeV.setOnAction(new ChangeMenu(this.util,6));
+       
+        mesVoyages.getItems().setAll(accueil,cherV,proposeV);
+        application.getItems().setAll(deco,quitter);
+        aide.getItems().setAll(about);
         mainMenu.getMenus().addAll(mesVoyages,application, aide);
         mainMenu.setUseSystemMenuBar(true);
         this.root.setTop(mainMenu);  
@@ -100,6 +111,9 @@ public abstract class Fenetre  {
                 case 5:
                     PageRecherche recherche =new PageRecherche(this.util);
                     break;
+                case 6:
+                    PageProposerVoyage propose =new PageProposerVoyage(this.util);
+                    break;
                 default:
                     break;
             }
@@ -121,6 +135,7 @@ public abstract class Fenetre  {
             }
             return utilisateur;
         }
+    
     public Utilisateur utilisateurRandom() throws FileNotFoundException{
             Utilisateur utilisateur=null;
             Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));

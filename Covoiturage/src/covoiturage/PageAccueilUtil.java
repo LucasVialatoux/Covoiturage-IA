@@ -121,15 +121,11 @@ public class PageAccueilUtil extends Fenetre {
         String[] discussion = scan.split("#");
         Utilisateur util1 = this.trouverUtil(parts[0]);
         Utilisateur util2 = this.trouverUtil(parts[1]);
-        Voyage voyage = new Voyage(3,discussion[1], discussion[2]);
-        
-        int test = Integer.parseInt("2");
+        Voyage voyage = Voyage.trouverVoyage(util1,parts[2]);        
         
         int prix=Integer.parseInt(discussion[0]);
         
-        System.out.println(discussion[0]);
-        
-        Discussion dis = new Discussion(util1, util2, prix, voyage, discussion[3]);
+        Discussion dis = new Discussion(util1, util2, voyage, discussion[3]);
         return dis;
     }
     
@@ -138,4 +134,5 @@ public class PageAccueilUtil extends Fenetre {
         listefichiers = repertoire.list();
         return listefichiers;
     }
+
 }

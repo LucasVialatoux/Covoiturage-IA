@@ -23,16 +23,19 @@ public class Discussion {
     private String nomvoyageur;
     private Utilisateur conducteur;
     private String nomconducteur;
-    private int prix;
     private Voyage voyage;
+    
+    private int prix;
             
-    public Discussion(Utilisateur user1,Utilisateur user2, int prix, Voyage voyage,String date){
+    
+    public Discussion(Utilisateur user1,Utilisateur user2, Voyage voyage,String date){
         this.voyageur=user1;
         this.nomvoyageur=this.voyageur.nom;
         this.conducteur=user2;
         this.nomconducteur=this.conducteur.nom;
-        this.prix=prix;
         this.voyage=voyage;
+        
+        this.prix = this.voyage.getPrix();
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{

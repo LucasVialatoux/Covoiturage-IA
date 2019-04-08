@@ -93,20 +93,16 @@ public class PageRecherche extends Fenetre{
         } else if (date == null){
             boiteDialogueError(3);
         } else{
-            Utilisateur conducteur = this.utilisateurRandom();
-            //random entre 10 et 1000 compris
-            int prixRnd=  (int)(Math.random() * ((1000-10) + 1));
             
-            Voyage voyage = new Voyage(3,depart,arrivee);
-            Discussion disc = new Discussion(this.util,conducteur,prixRnd,voyage,date.toString());
+            
+            Voyage[] voyage = Voyage.listeVoyagesCorrepondant(depart,arrivee,date);
+            Discussion disc = new Discussion(this.util,conducteur,voyage,date.toString());
             
             stage.close();
             voyage.sauvegardeVoyage();
             disc.conversation();
             new PageMessage(this.util,disc);
         }
-        //A FAIRE :
-        //AJOUTER TEST FORMAT DATE INCORRECT
         
     }
     

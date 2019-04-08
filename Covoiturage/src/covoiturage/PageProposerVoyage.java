@@ -101,44 +101,53 @@ public class PageProposerVoyage extends Fenetre{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
+        int prix = Integer.parseInt(Prix.getText());
+        int nbPlaces = Integer.parseInt(NbPlaces.getText());
         
-        if (depart.isEmpty() && arrivee.isEmpty() && date == null){
+        if (depart.isEmpty()){
             boiteDialogueError(1);
-        } else if (depart.isEmpty() || arrivee.isEmpty()){
+        } else if (arrivee.isEmpty()){
             boiteDialogueError(2);
         } else if (date == null){
             boiteDialogueError(3);
-        } else{
-            Utilisateur conducteur = this.utilisateurRandom();
-            //random entre 10 et 1000 compris
-            int prixRnd=  (int)(Math.random() * ((1000-10) + 1));
+        } else if(prix==0){
+            boiteDialogueError(5);
+        } else if(nbPlaces==0){
+            boiteDialogueError(4);
+        }
+        else{
             
-            Voyage voyage = new Voyage(3,depart,arrivee);
-            Discussion disc = new Discussion(this.util,conducteur,prixRnd,voyage,date.toString());
-            
+            Voyage voyage = new Voyage(util,prix,nbPlaces,depart,arrivee);
             stage.close();
             voyage.sauvegardeVoyage();
-            disc.conversation();
-            new PageMessage(this.util,disc);
+            new PageAccueilUtil(this.util);
         }
     }
-    //info=1 : Tout vide
-    //info=2 : Pas de départ ni d'arrivée
+    
+    //info=1 : Pas ville départ
+    //info=2 : Pas ville arrivée
     //info=3 : pas de date
-    //info autre : Format date incorrecte
+    //info=3 : pas de prix (=0)
+    //info=3 : pas de nbplaces (=0)
     public void boiteDialogueError(int info){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur de saisie");
         alert.setHeaderText("Informations manquantes !");
         switch (info) {
             case 1:
-                alert.setContentText("Veuillez entrer soit une ville de départ, soit une ville d'arrivée ainsi qu'une date");
+                alert.setContentText("Veuillez entrer une ville de départ");
                 break;
             case 2:
-                alert.setContentText("Veuillez entrer une ville de départ et une ville d'arrivée");
+                alert.setContentText("Veuillez entrer une ville d'arrivée");
                 break;
             case 3:
                 alert.setContentText("Veuillez entrer une date");
+                break;
+            case 4:
+                alert.setContentText("Veuillez entrer un prix valide");
+                break;
+            case 5:
+                alert.setContentText("Veuillez entrer un nombre de passager valide");
                 break;
             default:
                 alert.setContentText("Format de la date incorrecte (Rappel du format : JJ/MM/AAAA");
