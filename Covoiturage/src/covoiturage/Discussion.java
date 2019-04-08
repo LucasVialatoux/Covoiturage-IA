@@ -39,7 +39,7 @@ public class Discussion {
     }
    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.prix+"#"+this.voyage.getVilleArrivee()+"#"+this.voyage.getVilleDepart()+"#"+this.voyage.getDate()+";\n";
+        String ajout=this.prix+"#"+this.voyage.getVilleArrivee()+"#"+this.voyage.getVilleDepart()+"#"+this.voyage.getDate()+"#\n";
         for(String s : messages){
             ajout+=s+";\n";
         }
@@ -55,22 +55,15 @@ public class Discussion {
         String path = this.voyageur.id+"-"+this.conducteur.id+"-"+this.voyage.getId()+".txt";
         
         File f = new File("messages/"+path);
-        String msg="";
         ArrayList<String> str=new ArrayList();
         if(f.exists() && !f.isDirectory()) { 
             Scanner sc = new Scanner(f);
             while(sc.hasNextLine()){
                 String temp = sc.nextLine();
-                msg+="\n"+temp;                   
-            }
-        }
-        boolean premierIteration=true;
-        String [] parts=msg.split(";");
-        for(String s:parts){
-            if(premierIteration)premierIteration=false;
-            else{
-                s=s.substring(1,s.length());
-                str.add(s);
+                if(!"#".equals(temp.substring(temp.length() - 1))){
+                    temp=temp.substring(0,temp.length() - 1);
+                    str.add(temp);
+                }                    
             }
         }
         return str;
@@ -137,7 +130,6 @@ public class Discussion {
         boolean poserQuestion = false;
         boolean QFumer = false;
         boolean virg = false;
-        boolean aLaLigne = false;
         //
         //Affichage des préférences Conducteur
         //
@@ -151,8 +143,6 @@ public class Discussion {
                     newMessage+=  "est Fumeur";
                     CEstFumeur = true;
                 } else {
-                    if(!aLaLigne)aLaLigne = true;
-                    else newMessage+="\n";
                     if(tabPrefConducteur.get(i).equals("Enfants")){
                         CEstEnfants = true;
                     }
@@ -171,20 +161,18 @@ public class Discussion {
         //
         //Affichage des préférences Utilisateur
         //
-        aLaLigne = false;
         System.out.println(tabPrefUtilisateur.size());
         if(tabPrefUtilisateur.size()>0){
             System.out.println("ici");
             newMessage="L'utilisateur";
              for (int i=0;i<tabPrefUtilisateur.size();i++){
+                if (i>0){
+                    newMessage+=  ",";
+                }
                 if(tabPrefUtilisateur.get(i).equals("Fumeur")){
                     UEstFumeur = true;
                     //Si conducteur est non fumeur
                     if (!CEstFumeur){
-                        if(virg) newMessage+=  ",";
-                        else virg=true;
-                        if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                         newMessage+=  " indique qu'il est Fumeur";
                         //Random pour savoir si il accepte de voyager avec un coducteur qui ne fume pas
                         int rndAccepte = negociationPrix(0,10);
@@ -193,7 +181,7 @@ public class Discussion {
                         if (rndAccepte > 4){
                             newMessage+=  " et accepte de voyager dans un voyage non fumeur";
                         //N'accepte pas
-                        } else if (rndAccepte<=4 && rndAccepte>1 ){
+                        } else if (rndAccepte >4 && rndAccepte<=2 ){
                             newMessage+=  " et demande si il pourra fumer pendant le voyage";
                             QFumer = true;
                             poserQuestion = true;
@@ -203,10 +191,6 @@ public class Discussion {
                         }
                     }
                 } else if(tabPrefUtilisateur.get(i).equals("Animaux")){
-                    if(virg) newMessage+=  ",";
-                    else virg=true;     
-                    if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                     UEstAnimaux = true;
                     if (!CEstAnimaux){
                         newMessage+=" demande au conducteur si il accepte les animaux";
@@ -214,10 +198,6 @@ public class Discussion {
                     }
                 //Enfants
                 } else {
-                    if(virg) newMessage+=  ",";
-                    else virg=true;
-                    if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                     UEstEnfants = true;
                     if (!CEstEnfants){
                         newMessage+=" demande au conducteur si il accepte les enfants";
@@ -226,14 +206,11 @@ public class Discussion {
                 }
             }
             if (!UEstFumeur && CEstFumeur ){
-                if(virg) newMessage+=  ",";
-                else virg=true;
-                if(!aLaLigne)aLaLigne = true;
-                    else newMessage+="\n";
+                virg=true;
                 newMessage+=  " n'est pas Fumeur";
-                int rndAccepte = negociationPrix(0,10);
+                int rndAccepte = negociationPrix(0,1);
                 //Accepte de voyager
-                if (rndAccepte >= 2){
+                if (rndAccepte == 1){
                     newMessage+=  " et accepte de voyager dans un voyage fumeur";
                 //N'accepte pas
                 } else {
@@ -244,8 +221,6 @@ public class Discussion {
             if (CEstAnimaux && !UEstAnimaux){
                 if(virg) newMessage+=  ",";
                 else virg=true;
-                if(!aLaLigne)aLaLigne = true;
-                    else newMessage+="\n";
                 int rndAccepte = negociationPrix(0,10);
                 //Accepte de voyager
                 if (rndAccepte>= 2){
@@ -259,8 +234,6 @@ public class Discussion {
             if (CEstEnfants && !UEstEnfants){
                 if(virg) newMessage+=  ",";
                 else virg=true;
-                if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                 int rndAccepte = negociationPrix(0,10);
                 //Accepte de voyager
                 if (rndAccepte>= 2){
@@ -277,13 +250,10 @@ public class Discussion {
             messages.add(newMessage);
         }
         virg=false;
-        aLaLigne=false;
         if (!discussionFini && poserQuestion){
             newMessage="Le conducteur";
             if(UEstEnfants && !CEstEnfants){
                 virg = true;
-                if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                 int rndAccepte = negociationPrix(0,10);
                 //Accepte de voyager
                 if (rndAccepte>= 2){
@@ -297,8 +267,6 @@ public class Discussion {
             if(UEstAnimaux && !CEstAnimaux){
                 if(virg) newMessage+=  ",";
                 else virg=true;
-                if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                 int rndAccepte = negociationPrix(0,10);
                 //Accepte de voyager
                 if (rndAccepte>= 2){
@@ -312,8 +280,6 @@ public class Discussion {
             if(QFumer){
                 if(virg) newMessage+=  ",";
                 else virg=true;
-                if(!aLaLigne)aLaLigne = true;
-                        else newMessage+="\n";
                 int rndAccepte = negociationPrix(0,10);
                 //Accepte de voyager
                 if (rndAccepte>= 2){
