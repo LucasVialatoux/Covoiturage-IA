@@ -28,7 +28,7 @@ public class Discussion {
     private int prix;
             
     
-    public Discussion(Utilisateur user1,Utilisateur user2, Voyage voyage,String date){
+    public Discussion(Utilisateur user1,Utilisateur user2, Voyage voyage){
         this.voyageur=user1;
         this.nomvoyageur=this.voyageur.nom;
         this.conducteur=user2;
@@ -362,8 +362,8 @@ public class Discussion {
         }
         enregisterConversation(messages);
         if(tombentDaccord){
-            this.voyage.ajouterPassagers();
-            if(UEstEnfants)this.voyage.ajouterPassagers();
+            this.voyage.ajouterPassager();
+            if(UEstEnfants)this.voyage.ajouterPassager();
         }
     }
     

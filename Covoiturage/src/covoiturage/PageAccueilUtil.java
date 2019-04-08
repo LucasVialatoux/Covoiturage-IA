@@ -121,11 +121,11 @@ public class PageAccueilUtil extends Fenetre {
         String[] discussion = scan.split("#");
         Utilisateur util1 = this.trouverUtil(parts[0]);
         Utilisateur util2 = this.trouverUtil(parts[1]);
-        Voyage voyage = Voyage.trouverVoyage(util1,parts[2]);        
+        Voyage voyage = trouverVoyage(util1,parts[2]);        
         
         int prix=Integer.parseInt(discussion[0]);
         
-        Discussion dis = new Discussion(util1, util2, voyage, discussion[3]);
+        Discussion dis = new Discussion(util1, util2, voyage);
         return dis;
     }
     
@@ -133,6 +133,33 @@ public class PageAccueilUtil extends Fenetre {
         String[] listefichiers;
         listefichiers = repertoire.list();
         return listefichiers;
+    }
+    
+    public Voyage trouverVoyage(Utilisateur util, String part) {
+        String path = "voyages/"+util.id+"-"+part+".txt";
+        File f = new File(path);
+        Voyage voyage = new Voyage();
+        String[] elementsvoyage;
+        if(f.exists() && !f.isDirectory()) { 
+            try {
+                
+                    Scanner scanner = new Scanner(new FileReader(f));
+                    String scan = scanner.nextLine();
+                    elementsvoyage = scan.split("#");                
+                    voyage.setConducteur(util);
+                    
+                    voyage.setDate(elementsvoyage[0]);
+                    voyage.setVilleDepart(elementsvoyage[1]);
+                    voyage.setVilleArrivee(elementsvoyage[2]);
+                    voyage.setNbplaces(Integer.parseInt(elementsvoyage[3]));
+                    voyage.setNbpassagers(Integer.parseInt(elementsvoyage[4]));
+                    voyage.setPrix(Integer.parseInt(elementsvoyage[5]));
+                } 
+            catch (FileNotFoundException ex) {
+                Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return voyage;
     }
 
 }

@@ -119,7 +119,7 @@ public abstract class Fenetre  {
             }
         }  
     }
-    public Utilisateur trouverUtil(String s) throws FileNotFoundException{
+    public static Utilisateur trouverUtil(String s) throws FileNotFoundException{
             Utilisateur utilisateur=null;
             Scanner scanner = new Scanner(new FileReader("utilisateur.txt"));
             while (scanner.hasNextLine()) {

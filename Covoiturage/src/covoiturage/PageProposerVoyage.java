@@ -8,6 +8,7 @@ package covoiturage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -101,6 +102,10 @@ public class PageProposerVoyage extends Fenetre{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
+        String pattern = "yyyy-MM-dd";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+        String dateStr =dateFormatter.format(date);
+        
         int prix = Integer.parseInt(Prix.getText());
         int nbPlaces = Integer.parseInt(NbPlaces.getText());
         
@@ -117,7 +122,7 @@ public class PageProposerVoyage extends Fenetre{
         }
         else{
             
-            Voyage voyage = new Voyage(util,prix,nbPlaces,depart,arrivee);
+            Voyage voyage = new Voyage(util,prix,nbPlaces,depart,arrivee,dateStr);
             stage.close();
             voyage.sauvegardeVoyage();
             new PageAccueilUtil(this.util);

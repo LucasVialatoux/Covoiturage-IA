@@ -1,8 +1,13 @@
 package covoiturage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -86,6 +91,10 @@ public class PageRecherche extends Fenetre{
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
         
+        String pattern = "yyyy-MM-dd";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+        String dateStr =dateFormatter.format(date);
+        
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
         } else if (depart.isEmpty() || arrivee.isEmpty()){
@@ -93,17 +102,10 @@ public class PageRecherche extends Fenetre{
         } else if (date == null){
             boiteDialogueError(3);
         } else{
-            
-            
-            Voyage[] voyage = Voyage.listeVoyagesCorrepondant(depart,arrivee,date);
-            Discussion disc = new Discussion(this.util,conducteur,voyage,date.toString());
-            
+            ArrayList<Voyage> voyages = listeVoyagesCorrepondant(depart,arrivee,dateStr);
+            PageResultat pr = new PageResultat(voyages,util);
             stage.close();
-            voyage.sauvegardeVoyage();
-            disc.conversation();
-            new PageMessage(this.util,disc);
-        }
-        
+        }        
     }
     
     //info=1 : Tout vide
@@ -128,8 +130,32 @@ public class PageRecherche extends Fenetre{
                 alert.setContentText("Format de la date incorrecte (Rappel du format : JJ/MM/AAAA");
                 break;
         }
-        
         alert.showAndWait();
+    }
+    
+    public ArrayList<Voyage> listeVoyagesCorrepondant(String depart, String arrivee, String date) {
+        ArrayList<Voyage> voyages = new ArrayList<>();
+        File folder = new File("voyages/.");
+        for (final File fileEntry : folder.listFiles()) {
+            String[] elementsvoyage;
+            Scanner scanner;
+            try {
+                scanner = new Scanner(new FileReader(fileEntry));
+                String scan = scanner.nextLine();
+                elementsvoyage = scan.split("#");
+                String file = fileEntry.getName().substring(0, fileEntry.getName().length() - 4);
+                String[] filename = file.split("-");
+                if(date.equals(elementsvoyage[0]) &&  depart.equals(elementsvoyage[1]) && arrivee.equals(elementsvoyage[2])){
+                    System.out.print(Fenetre.trouverUtil(filename[0])); 
+                    Voyage v = new Voyage(Fenetre.trouverUtil(filename[0]),Integer.parseInt(filename[1]),Integer.parseInt(elementsvoyage[5]),Integer.parseInt(elementsvoyage[3]),elementsvoyage[1],elementsvoyage[2],elementsvoyage[0],Integer.parseInt(elementsvoyage[4]));
+                    if(!v.estPlein())
+                        voyages.add(v);
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+        return voyages;
     }
     
 }
