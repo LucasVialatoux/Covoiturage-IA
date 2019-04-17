@@ -1,13 +1,9 @@
 package covoiturage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,7 +78,7 @@ public class Voyage {
     }
     
     public void ajouterPassager(){
-        if(this.estPlein()){
+        if(!this.estPlein()){
             this.nbpassagers++;
             sauvegardeVoyage();        
         }
@@ -93,8 +89,8 @@ public class Voyage {
         int temp;
         File folder = new File("voyages/.");
         for (final File fileEntry : folder.listFiles()) {
-            String name=fileEntry.getName();
-            temp = Integer.parseInt(name.substring(0, 1));
+            String[] name=fileEntry.getName().split("-");
+            temp = Integer.parseInt(name[1].replace(".txt",""));
             if(newid<temp)
                 newid=temp;
         }

@@ -5,12 +5,14 @@
  */
 package covoiturage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import static javafx.geometry.HPos.RIGHT;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -44,6 +46,19 @@ public class PageResultat extends Fenetre{
             grid.add(button,1,i);
             i++;
         }
+        Button retour = new Button("Retour");
+        retour.setOnAction((ActionEvent t) -> {
+            stage.close();
+            try {
+                new PageAccueilUtil(util);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PageMessage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        GridPane.setHalignment(retour,RIGHT);
+        GridPane.setMargin(retour, new Insets(20, 0, 0, 0));
+        grid.add(retour,1,voyages.size()+1);
         root.setCenter(grid);
         
     }  

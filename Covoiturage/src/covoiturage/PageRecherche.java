@@ -91,10 +91,6 @@ public class PageRecherche extends Fenetre{
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
         
-        String pattern = "yyyy-MM-dd";
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-        String dateStr =dateFormatter.format(date);
-        
         if (depart.isEmpty() && arrivee.isEmpty() && date == null){
             boiteDialogueError(1);
         } else if (depart.isEmpty() || arrivee.isEmpty()){
@@ -102,6 +98,9 @@ public class PageRecherche extends Fenetre{
         } else if (date == null){
             boiteDialogueError(3);
         } else{
+            String pattern = "yyyy-MM-dd";
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+            String dateStr =dateFormatter.format(date);
             ArrayList<Voyage> voyages = listeVoyagesCorrepondant(depart,arrivee,dateStr);
             PageResultat pr = new PageResultat(voyages,util);
             stage.close();
@@ -145,17 +144,26 @@ public class PageRecherche extends Fenetre{
                 elementsvoyage = scan.split("#");
                 String file = fileEntry.getName().substring(0, fileEntry.getName().length() - 4);
                 String[] filename = file.split("-");
+                int idVoyage = Integer.parseInt(filename[1].replace(".txt",""));
+                
                 if(date.equals(elementsvoyage[0]) &&  depart.equals(elementsvoyage[1]) && arrivee.equals(elementsvoyage[2])){
-                    System.out.print(Fenetre.trouverUtil(filename[0])); 
-                    Voyage v = new Voyage(Fenetre.trouverUtil(filename[0]),Integer.parseInt(filename[1]),Integer.parseInt(elementsvoyage[5]),Integer.parseInt(elementsvoyage[3]),elementsvoyage[1],elementsvoyage[2],elementsvoyage[0],Integer.parseInt(elementsvoyage[4]));
-                    if(!v.estPlein())
+                    Utilisateur conducteur = Fenetre.trouverUtil(filename[0]);
+                    Voyage v = new Voyage(conducteur,Integer.parseInt(filename[1]),Integer.parseInt(elementsvoyage[5]),Integer.parseInt(elementsvoyage[3]),elementsvoyage[1],elementsvoyage[2],elementsvoyage[0],Integer.parseInt(elementsvoyage[4]));
+                    if(!v.estPlein() && conducteur.id != util.id && pasDejaReserve(idVoyage,conducteur.id,util.id))
                         voyages.add(v);
                 }
+                scanner.close();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
+        
         return voyages;
+    }
+
+    public boolean pasDejaReserve(int idVoyage,int idConducteur,int idVoyageur) {        
+        File f = new File("messages/"+idVoyageur+"-"+idConducteur+"-"+idVoyage+".txt");
+        return !f.exists();
     }
     
 }

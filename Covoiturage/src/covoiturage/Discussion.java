@@ -33,8 +33,7 @@ public class Discussion {
         this.nomvoyageur=this.voyageur.nom;
         this.conducteur=user2;
         this.nomconducteur=this.conducteur.nom;
-        this.voyage=voyage;
-        
+        this.voyage=voyage;        
         this.prix = this.voyage.getPrix();
     }
    

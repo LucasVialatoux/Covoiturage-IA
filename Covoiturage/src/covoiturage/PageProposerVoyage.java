@@ -19,6 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
@@ -30,8 +32,8 @@ public class PageProposerVoyage extends Fenetre{
     public DatePicker Date;
     public TextField Depart;
     public TextField Arrivee;
-    public TextField Prix;
-    public TextField NbPlaces;
+    public Spinner<Integer> Prix;
+    public Spinner<Integer> NbPlaces;
     
     public PageProposerVoyage(Utilisateur util) {
         super(util);
@@ -56,14 +58,22 @@ public class PageProposerVoyage extends Fenetre{
         grid.add(Arrivee, 1, 2);
         
         Label labelPrix = new Label("Prix : ");
-        Prix = new TextField();
+        Prix = new Spinner<>();
+        Prix.setEditable(true);
+        SpinnerValueFactory<Integer> prixFactory = //
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 200, 50);
+        Prix.setValueFactory(prixFactory);
         GridPane.setHalignment(labelPrix, HPos.RIGHT);
         grid.add(labelPrix, 0, 3);
         GridPane.setHalignment(Prix, HPos.LEFT);
-        grid.add(Prix, 1, 3);
+        grid.add(Prix, 1, 3);        
         
+ 
         Label labeNbPlaces = new Label("Nombre de places disponible : ");
-        NbPlaces = new TextField();
+        NbPlaces = new Spinner<>();
+        SpinnerValueFactory<Integer> NbPlacesFactory = //
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 3);
+        NbPlaces.setValueFactory(NbPlacesFactory);
         GridPane.setHalignment(labeNbPlaces, HPos.RIGHT);
         grid.add(labeNbPlaces, 0, 4);
         GridPane.setHalignment(NbPlaces, HPos.LEFT);
@@ -76,7 +86,7 @@ public class PageProposerVoyage extends Fenetre{
         GridPane.setHalignment(Date, HPos.LEFT);
         grid.add(Date, 1, 5);
         
-        Button searchButton = new Button("Chercher un trajet");
+        Button searchButton = new Button("Proposer un trajet");
                
         // Horizontal alignment for search button.
         GridPane.setHalignment(searchButton, HPos.RIGHT);
@@ -102,27 +112,32 @@ public class PageProposerVoyage extends Fenetre{
         String depart = Depart.getText();
         String arrivee = Arrivee.getText();
         LocalDate date = Date.getValue();
-        String pattern = "yyyy-MM-dd";
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-        String dateStr =dateFormatter.format(date);
-        
-        int prix = Integer.parseInt(Prix.getText());
-        int nbPlaces = Integer.parseInt(NbPlaces.getText());
+        int prix;
+        try
+        {
+            prix = Integer.parseInt(Prix.getEditor().getText());
+        }
+        catch(NumberFormatException e){
+            prix = 0;
+        }
+        int nbplaces = NbPlaces.getValue();
         
         if (depart.isEmpty()){
             boiteDialogueError(1);
         } else if (arrivee.isEmpty()){
             boiteDialogueError(2);
+        } else if(prix <=0){
+            boiteDialogueError(4);
+        } else if(nbplaces==0){
+            boiteDialogueError(5);
         } else if (date == null){
             boiteDialogueError(3);
-        } else if(prix==0){
-            boiteDialogueError(5);
-        } else if(nbPlaces==0){
-            boiteDialogueError(4);
         }
         else{
-            
-            Voyage voyage = new Voyage(util,prix,nbPlaces,depart,arrivee,dateStr);
+            String pattern = "yyyy-MM-dd";
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+            String dateStr =dateFormatter.format(date);
+            Voyage voyage = new Voyage(util,prix,nbplaces,depart,arrivee,dateStr);
             stage.close();
             voyage.sauvegardeVoyage();
             new PageAccueilUtil(this.util);

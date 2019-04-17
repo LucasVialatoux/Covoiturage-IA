@@ -121,7 +121,7 @@ public class PageAccueilUtil extends Fenetre {
         String[] discussion = scan.split("#");
         Utilisateur util1 = this.trouverUtil(parts[0]);
         Utilisateur util2 = this.trouverUtil(parts[1]);
-        Voyage voyage = trouverVoyage(util1,parts[2]);        
+        Voyage voyage = trouverVoyage(util2,parts[2]);        
         
         int prix=Integer.parseInt(discussion[0]);
         
@@ -136,18 +136,18 @@ public class PageAccueilUtil extends Fenetre {
     }
     
     public Voyage trouverVoyage(Utilisateur util, String part) {
+        part=part.replace(".txt","");
         String path = "voyages/"+util.id+"-"+part+".txt";
         File f = new File(path);
         Voyage voyage = new Voyage();
         String[] elementsvoyage;
         if(f.exists() && !f.isDirectory()) { 
             try {
-                
                     Scanner scanner = new Scanner(new FileReader(f));
                     String scan = scanner.nextLine();
                     elementsvoyage = scan.split("#");                
-                    voyage.setConducteur(util);
-                    
+                    voyage.setConducteur(util);      
+                    voyage.setId(Integer.parseInt(part));
                     voyage.setDate(elementsvoyage[0]);
                     voyage.setVilleDepart(elementsvoyage[1]);
                     voyage.setVilleArrivee(elementsvoyage[2]);

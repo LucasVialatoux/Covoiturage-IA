@@ -1,5 +1,0 @@
-50#Clermont#Lyon#2019-04-08#
-L'utilisateur souhaite voyager;
-Le conducteur indique que son voyage est Fumeur;
-L'utilisateur propose 45€;
-Conducteur ok pour 45€;
