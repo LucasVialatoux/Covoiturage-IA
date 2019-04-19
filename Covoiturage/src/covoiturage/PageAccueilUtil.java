@@ -9,66 +9,50 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class PageAccueilUtil extends Fenetre {
 
     public PageAccueilUtil(Utilisateur util) throws FileNotFoundException {
         super(util);
 
-        TableView<Discussion> tableAnnonces = new TableView();
         TableView<Discussion> tableReservations = new TableView();
+        TableView<Discussion> tableAnnonces = new TableView();
         ObservableList<Discussion> dataAnnonces = dataAnnonces();
         ObservableList<Discussion> dataReservations = dataReservations();
 
         TableColumn dateAnnonces = new TableColumn("Date");
-        dateAnnonces.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
+        dateAnnonces.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateAnnonces.setSortType(TableColumn.SortType.DESCENDING);
         TableColumn dateReservations= new TableColumn("Date");
-        dateReservations.setCellValueFactory(new PropertyValueFactory<Discussion, String>("date"));
+        dateReservations.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateReservations.setSortType(TableColumn.SortType.DESCENDING);
         
         TableColumn voyageAnnonces = new TableColumn("Voyage");
-        voyageAnnonces.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
+        voyageAnnonces.setCellValueFactory(new PropertyValueFactory<>("voyage"));
         TableColumn voyageReservations = new TableColumn("Voyage");
-        voyageReservations.setCellValueFactory(new PropertyValueFactory<Discussion, String>("voyage"));
+        voyageReservations.setCellValueFactory(new PropertyValueFactory<>("voyage"));
         
         TableColumn conducteur = new TableColumn("Conducteur");
-        conducteur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("nomconducteur"));
+        conducteur.setCellValueFactory(new PropertyValueFactory<>("nomconducteur"));
         TableColumn voyageur = new TableColumn("Voyageur");
-        voyageur.setCellValueFactory(new PropertyValueFactory<Discussion, String>("nomvoyageur"));
+        voyageur.setCellValueFactory(new PropertyValueFactory<>("nomvoyageur"));
 
-        tableReservations.getColumns().addAll(dateReservations, voyageReservations, voyageur);
-        tableReservations.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tableReservations.setCursor(Cursor.CLOSED_HAND);
-        tableReservations.getItems().setAll(dataReservations);
-        tableReservations.getSortOrder().add(dateReservations);
-        tableReservations.setRowFactory(tv -> {
-            TableRow<Discussion> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Discussion rowData = row.getItem();
-                    stage.close();
-                    try {
-                        PageMessage pagemessage = new PageMessage(this.util, rowData);
-                    } catch (IOException ex) {
-                        Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            return row;
-        });
-
-        tableAnnonces.getColumns().addAll(dateAnnonces, voyageAnnonces, conducteur);
+        tableAnnonces.getColumns().addAll(dateReservations, voyageReservations, voyageur);
         tableAnnonces.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableAnnonces.setCursor(Cursor.CLOSED_HAND);
         tableAnnonces.getItems().setAll(dataAnnonces);
-        tableAnnonces.getSortOrder().add(dateAnnonces);
+        tableAnnonces.getSortOrder().add(dateReservations);
         tableAnnonces.setRowFactory(tv -> {
             TableRow<Discussion> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -85,12 +69,49 @@ public class PageAccueilUtil extends Fenetre {
             return row;
         });
 
+        tableReservations.getColumns().addAll(dateAnnonces, voyageAnnonces, conducteur);
+        tableReservations.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableReservations.setCursor(Cursor.CLOSED_HAND);
+        tableReservations.getItems().setAll(dataReservations);
+        tableReservations.getSortOrder().add(dateAnnonces);
+        tableReservations.setRowFactory(tv -> {
+            TableRow<Discussion> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Discussion rowData = row.getItem();
+                    stage.close();
+                    try {
+                        PageMessage pagemessage = new PageMessage(this.util, rowData);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            return row;
+        });
+
+        Label labelreservations = new Label("Liste des voyages que vous avez réservés :");
+        labelreservations.setMaxWidth(Double.MAX_VALUE);
+        AnchorPane.setLeftAnchor(labelreservations, 0.0);
+        AnchorPane.setRightAnchor(labelreservations, 0.0);
+        labelreservations.setAlignment(Pos.CENTER);
+        labelreservations.setFont(new Font(15));
+        labelreservations.setPadding(new Insets(10, 0, 10, 0));
+        
+        Label labelannonces = new Label("Liste des voyages que vous avez proposés :");
+        labelannonces.setMaxWidth(Double.MAX_VALUE);
+        AnchorPane.setLeftAnchor(labelannonces, 0.0);
+        AnchorPane.setRightAnchor(labelannonces, 0.0);
+        labelannonces.setAlignment(Pos.CENTER);
+        labelannonces.setFont(new Font(15));
+        labelannonces.setPadding(new Insets(10, 0, 10, 0));
+        
         VBox vb = new VBox();
-        vb.getChildren().addAll(tableAnnonces, tableReservations);
+        vb.getChildren().addAll(labelreservations,tableReservations,labelannonces, tableAnnonces);
         root.setCenter(vb);
     }
 
-    public ObservableList<Discussion> dataAnnonces() throws FileNotFoundException {
+    private ObservableList<Discussion> dataAnnonces() throws FileNotFoundException {
         ObservableList<Discussion> data = FXCollections.observableArrayList();
         String[] listeDiscussion;
         listeDiscussion = listerRepertoire(new File("messages"));
@@ -102,7 +123,7 @@ public class PageAccueilUtil extends Fenetre {
         }
         return data;
     }
-    public ObservableList<Discussion> dataReservations() throws FileNotFoundException {
+    private ObservableList<Discussion> dataReservations() throws FileNotFoundException {
         ObservableList<Discussion> data = FXCollections.observableArrayList();
         String[] listeDiscussion;
         listeDiscussion = listerRepertoire(new File("messages"));
@@ -119,8 +140,8 @@ public class PageAccueilUtil extends Fenetre {
         Scanner scanner = new Scanner(new FileReader("messages\\" + s));
         String scan = scanner.nextLine();
         String[] discussion = scan.split("#");
-        Utilisateur util1 = this.trouverUtil(parts[0]);
-        Utilisateur util2 = this.trouverUtil(parts[1]);
+        Utilisateur util1 = Fenetre.trouverUtil(parts[0]);
+        Utilisateur util2 = Fenetre.trouverUtil(parts[1]);
         Voyage voyage = trouverVoyage(util2,parts[2]);        
         
         int prix=Integer.parseInt(discussion[0]);

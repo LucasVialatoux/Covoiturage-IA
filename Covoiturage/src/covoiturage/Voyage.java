@@ -130,6 +130,14 @@ public class Voyage {
         return conducteur;
     }
 
+    public String getNomConducteur() {
+        return this.conducteur.nom;
+    }
+
+    public String getVoyage() {
+        return this.villeDepart+ "-" + this.villeArrivee;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }

@@ -34,7 +34,7 @@ public abstract class Fenetre  {
         this.util=util;
         this.stage=new Stage();
         this.root = new BorderPane(); 
-        Scene scene = new Scene(this.root, 1200, 675);
+        Scene scene = new Scene(this.root, 1400, 800);
         this.stage.setTitle("Covoiturage");
         String imageURI = new File("icone.jpg").toURI().toString(); 
         Image image = new Image(imageURI);
@@ -58,11 +58,11 @@ public abstract class Fenetre  {
         
         MenuItem deco = new MenuItem("Se deconnecter");
         deco.setOnAction(new ChangeMenu(this.util,1));
-        aide.setOnAction(new ChangeMenu(this.util,2));
         
         MenuItem about = new MenuItem("A propos");
+        about.setOnAction(new ChangeMenu(this.util,2));
         
-        MenuItem accueil = new MenuItem("Accueil");
+        MenuItem accueil = new MenuItem("Liste des voyages");
         accueil.setOnAction(new ChangeMenu(this.util,3));
         
         MenuItem cherV = new MenuItem("Chercher un voyage");

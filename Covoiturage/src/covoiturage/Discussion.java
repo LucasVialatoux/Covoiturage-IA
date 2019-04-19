@@ -399,8 +399,7 @@ public class Discussion {
             if(UEstEnfants)this.voyage.ajouterPassager();
         }
     }
-    
-    
+        
     public int negociationPrix(int min,int max){
         int rndNumber = min + (int)(Math.random() * ((max - min) + 1));
         if(rndNumber<=0){
@@ -413,10 +412,9 @@ public class Discussion {
     public int getPrix() {
         return prix;
     }
-
     
     public String getVoyage() {
-        return this.voyage.getVilleArrivee() + "-" + this.voyage.getVilleDepart();
+        return this.voyage.getVoyage();
     }
     
     public String getDate() {
@@ -438,7 +436,5 @@ public class Discussion {
     public String getNomconducteur() {
         return nomconducteur;
     }
-    
-    
     
 }

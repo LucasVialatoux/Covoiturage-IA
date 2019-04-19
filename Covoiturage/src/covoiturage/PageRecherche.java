@@ -102,7 +102,7 @@ public class PageRecherche extends Fenetre{
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
             String dateStr =dateFormatter.format(date);
             ArrayList<Voyage> voyages = listeVoyagesCorrepondant(depart,arrivee,dateStr);
-            PageResultat pr = new PageResultat(voyages,util);
+            new PageResultat(voyages,util);
             stage.close();
         }        
     }
