@@ -28,8 +28,8 @@ public class PageAccueilUtil extends Fenetre {
 
         TableView<Discussion> tableReservations = new TableView();
         TableView<Discussion> tableAnnonces = new TableView();
-        ObservableList<Discussion> dataAnnonces = dataAnnonces();
-        ObservableList<Discussion> dataReservations = dataReservations();
+        ObservableList<Discussion> dataAnnonces = dataReservations();
+        ObservableList<Discussion> dataReservations = dataAnnonces();
 
         TableColumn dateAnnonces = new TableColumn("Date");
         dateAnnonces.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -47,48 +47,42 @@ public class PageAccueilUtil extends Fenetre {
         conducteur.setCellValueFactory(new PropertyValueFactory<>("nomconducteur"));
         TableColumn voyageur = new TableColumn("Voyageur");
         voyageur.setCellValueFactory(new PropertyValueFactory<>("nomvoyageur"));
-
-        tableAnnonces.getColumns().addAll(dateReservations, voyageReservations, voyageur);
+        
+        tableAnnonces.getColumns().addAll(dateAnnonces, voyageAnnonces, voyageur);
         tableAnnonces.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableAnnonces.setCursor(Cursor.CLOSED_HAND);
         tableAnnonces.getItems().setAll(dataAnnonces);
-        tableAnnonces.getSortOrder().add(dateReservations);
-        tableAnnonces.setRowFactory(tv -> {
-            TableRow<Discussion> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Discussion rowData = row.getItem();
-                    stage.close();
-                    try {
-                        PageMessage pagemessage = new PageMessage(this.util, rowData);
-                    } catch (IOException ex) {
-                        Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            return row;
-        });
-
-        tableReservations.getColumns().addAll(dateAnnonces, voyageAnnonces, conducteur);
+        tableAnnonces.getSortOrder().add(dateAnnonces);
+        
+        tableReservations.getColumns().addAll(dateReservations, voyageReservations, conducteur);
         tableReservations.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableReservations.setCursor(Cursor.CLOSED_HAND);
         tableReservations.getItems().setAll(dataReservations);
-        tableReservations.getSortOrder().add(dateAnnonces);
-        tableReservations.setRowFactory(tv -> {
-            TableRow<Discussion> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Discussion rowData = row.getItem();
+        tableReservations.getSortOrder().add(dateReservations);
+        
+        tableAnnonces.setRowFactory(tv -> new TableRow<Discussion>() {
+            @Override
+            public void updateItem(Discussion item, boolean empty) {
+                super.updateItem(item, empty) ;
+                if (item == null) {
+                    setStyle("");
+                } else if (item.getEstReserve()) {
+                    setStyle("-fx-background-color: lightgreen;");
+                } 
+                setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!isEmpty())) {
+                    Discussion rowData = getItem();
                     stage.close();
                     try {
-                        PageMessage pagemessage = new PageMessage(this.util, rowData);
+                        PageMessage pagemessage = new PageMessage(util, rowData);
                     } catch (IOException ex) {
                         Logger.getLogger(PageAccueilUtil.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
-            return row;
+            }
         });
+        tableReservations.setRowFactory(tableAnnonces.getRowFactory());
 
         Label labelreservations = new Label("Liste des voyages que vous avez réservés :");
         labelreservations.setMaxWidth(Double.MAX_VALUE);
@@ -137,15 +131,10 @@ public class PageAccueilUtil extends Fenetre {
     }
 
     public Discussion getDisc(String s,String[] parts) throws FileNotFoundException{
-        Scanner scanner = new Scanner(new FileReader("messages\\" + s));
-        String scan = scanner.nextLine();
-        String[] discussion = scan.split("#");
+        
         Utilisateur util1 = Fenetre.trouverUtil(parts[0]);
         Utilisateur util2 = Fenetre.trouverUtil(parts[1]);
-        Voyage voyage = trouverVoyage(util2,parts[2]);        
-        
-        int prix=Integer.parseInt(discussion[0]);
-        
+        Voyage voyage = trouverVoyage(util2,parts[2]);
         Discussion dis = new Discussion(util1, util2, voyage);
         return dis;
     }
@@ -163,19 +152,18 @@ public class PageAccueilUtil extends Fenetre {
         Voyage voyage = new Voyage();
         String[] elementsvoyage;
         if(f.exists() && !f.isDirectory()) { 
-            try {
-                    Scanner scanner = new Scanner(new FileReader(f));
-                    String scan = scanner.nextLine();
-                    elementsvoyage = scan.split("#");                
-                    voyage.setConducteur(util);      
-                    voyage.setId(Integer.parseInt(part));
-                    voyage.setDate(elementsvoyage[0]);
-                    voyage.setVilleDepart(elementsvoyage[1]);
-                    voyage.setVilleArrivee(elementsvoyage[2]);
-                    voyage.setNbplaces(Integer.parseInt(elementsvoyage[3]));
-                    voyage.setNbpassagers(Integer.parseInt(elementsvoyage[4]));
-                    voyage.setPrix(Integer.parseInt(elementsvoyage[5]));
-                } 
+            try (Scanner scanner = new Scanner(new FileReader(f))) {
+                String scan = scanner.nextLine();
+                elementsvoyage = scan.split("#");
+                voyage.setConducteur(util);      
+                voyage.setId(Integer.parseInt(part));
+                voyage.setDate(elementsvoyage[0]);
+                voyage.setVilleDepart(elementsvoyage[1]);
+                voyage.setVilleArrivee(elementsvoyage[2]);
+                voyage.setNbplaces(Integer.parseInt(elementsvoyage[3]));
+                voyage.setNbpassagers(Integer.parseInt(elementsvoyage[4]));
+                voyage.setPrix(Integer.parseInt(elementsvoyage[5]));
+            }
             catch (FileNotFoundException ex) {
                 Logger.getLogger(Voyage.class.getName()).log(Level.SEVERE, null, ex);
             }

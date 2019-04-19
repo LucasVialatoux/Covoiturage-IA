@@ -24,7 +24,7 @@ public class Discussion {
     private Utilisateur conducteur;
     private String nomconducteur;
     private Voyage voyage;
-    
+    private boolean estReserve;    
     private int prix;
             
     
@@ -35,10 +35,26 @@ public class Discussion {
         this.nomconducteur=this.conducteur.nom;
         this.voyage=voyage;        
         this.prix = this.voyage.getPrix();
+        this.estReserve=recupReservation();
     }
    
+    
+    private boolean recupReservation() {
+        String path = this.voyageur.id+"-"+this.conducteur.id+"-"+this.voyage.getId()+".txt";
+        
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new FileReader("messages\\" + path));
+            String scan = scanner.nextLine();
+            String[] information = scan.split("#");
+            return Boolean.parseBoolean(information[4]);
+        } catch (FileNotFoundException ex) {
+            return false;
+        }
+    }
+    
     public void enregisterConversation(ArrayList<String> messages) throws IOException{
-        String ajout=this.prix+"#"+this.voyage.getVilleArrivee()+"#"+this.voyage.getVilleDepart()+"#"+this.voyage.getDate()+"#\n";
+        String ajout=this.prix+"#"+this.voyage.getVilleArrivee()+"#"+this.voyage.getVilleDepart()+"#"+this.voyage.getDate()+"#"+this.estReserve+"#\n";
         for(String s : messages){
             ajout+=s+";\n";
         }
@@ -92,11 +108,6 @@ public class Discussion {
             }
         }
         return str2;
-    }
-    
-    @Override
-    public String toString(){
-        return this.getPrix()+" "+this.getVoyage()+" "+this.voyage.getId();
     }
     
     public void conversation() throws IOException{
@@ -393,11 +404,12 @@ public class Discussion {
             }
             messages.add(newMessage);
         }
-        enregisterConversation(messages);
         if(tombentDaccord){
+            this.estReserve=true;
             this.voyage.ajouterPassager();
             if(UEstEnfants)this.voyage.ajouterPassager();
         }
+        enregisterConversation(messages);        
     }
         
     public int negociationPrix(int min,int max){
@@ -437,4 +449,8 @@ public class Discussion {
         return nomconducteur;
     }
     
+    public boolean getEstReserve(){
+        return this.estReserve;
+    }
+
 }

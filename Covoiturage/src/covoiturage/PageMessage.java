@@ -40,15 +40,15 @@ public class PageMessage extends Fenetre{
         VBox vpane = new VBox();
         ArrayList<String> messagesString=disc.recupererConversation();
         
-        String infos ="A : ";
-        if(user.nom.equals(disc.getConducteur().nom))
+        String infos ="Message pour : ";
+        if(user.id!=disc.getConducteur().id)
         {
-            infos+= disc.getVoyageur().nom;
+            infos+= disc.getConducteur().nom;
             index=2;
         }
         else
         {
-            infos+= disc.getConducteur().nom;
+            infos+= disc.getVoyageur().nom;
             index=3;
         }
         infos+=" | Voyage : "+disc.getVoyage() + " | Prix de base : "+Integer.toString(disc.getPrix())+"€";

@@ -1,0 +1,11 @@
+51#B#A#2019-04-01#false#
+L'utilisateur souhaite voyager;
+Le conducteur indique que son voyage est Fumeur;
+L'utilisateur demande au conducteur si il accepte les enfants,
+ n'est pas Fumeur et accepte de voyager dans un voyage fumeur;
+Le conducteur tolère les enfants;
+L'utilisateur propose 45€;
+Conducteur propose 50€;
+Utilisateur propose 45€;
+Conducteur propose 50€;
+Utilisateur ne montera pas au dessus de 45€;

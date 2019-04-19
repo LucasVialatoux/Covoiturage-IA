@@ -1,0 +1,10 @@
+51#B#A#2019-04-01#false#
+L'utilisateur souhaite voyager;
+Le conducteur indique que son voyage est Fumeur;
+L'utilisateur demande au conducteur si il accepte les animaux,
+ n'est pas Fumeur et accepte de voyager dans un voyage fumeur;
+Le conducteur tolère les animaux;
+L'utilisateur propose 31€;
+Conducteur propose 51€;
+Utilisateur propose 45€;
+Conducteur ne descendra pas en dessous de 51€;

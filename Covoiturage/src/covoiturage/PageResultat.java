@@ -42,14 +42,16 @@ public class PageResultat extends Fenetre{
         });
         ObservableList<Voyage> dataResultat = data;
         
-        TableColumn dateResultat = new TableColumn("Date");
-        dateResultat.setCellValueFactory(new PropertyValueFactory<>("date"));
-        TableColumn voyageResultat = new TableColumn("Voyage");
-        voyageResultat.setCellValueFactory(new PropertyValueFactory<>("voyage"));
+        TableColumn date = new TableColumn("Date");
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        TableColumn voyage = new TableColumn("Voyage");
+        voyage.setCellValueFactory(new PropertyValueFactory<>("voyage"));
+        TableColumn placeLibre = new TableColumn("Place libre restante");
+        placeLibre.setCellValueFactory(new PropertyValueFactory<>("PlaceLibre"));
         TableColumn conducteur = new TableColumn("Conducteur");
         conducteur.setCellValueFactory(new PropertyValueFactory<>("NomConducteur"));
         
-        tableResultat.getColumns().addAll(dateResultat, voyageResultat, conducteur);
+        tableResultat.getColumns().addAll(date, voyage, placeLibre,conducteur);
         tableResultat.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableResultat.setCursor(Cursor.CLOSED_HAND);
         tableResultat.getItems().setAll(dataResultat);

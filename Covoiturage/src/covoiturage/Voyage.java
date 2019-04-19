@@ -138,6 +138,10 @@ public class Voyage {
         return this.villeDepart+ "-" + this.villeArrivee;
     }
     
+    public int getPlaceLibre(){
+        return this.nbplaces-this.nbpassagers;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }

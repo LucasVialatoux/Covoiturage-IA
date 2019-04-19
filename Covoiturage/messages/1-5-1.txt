@@ -1,0 +1,11 @@
+51#B#A#2019-04-01#false#
+L'utilisateur souhaite voyager;
+Le conducteur indique que son voyage est Fumeur;
+L'utilisateur propose 23€;
+Conducteur propose 48€;
+Utilisateur propose 36€;
+Conducteur propose 46€;
+Utilisateur propose 40€;
+Conducteur propose 46€;
+Utilisateur propose 45€;
+Conducteur ne descendra pas en dessous de 46€;
