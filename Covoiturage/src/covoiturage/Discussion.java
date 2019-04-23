@@ -119,12 +119,7 @@ public class Discussion {
         
         tabPrefUtilisateur = recupererPreference(false);
         tabPrefConducteur = recupererPreference(true);
-        for (String s : tabPrefUtilisateur){
-            System.out.println("tabPrefUtilisateur : "+s);
-        }
-        for (String s : tabPrefConducteur){
-            System.out.println("tabPrefConducteur : "+s);
-        }
+        
         int prixUtilActuel=(this.prix)-(this.prix*60/100);
         //Prix max utilisateur = random entre 0 et 20% du prix de base en moins
         int pourcentageRnd = (int)(Math.random() * (21));
@@ -182,9 +177,7 @@ public class Discussion {
         //Affichage des préférences Utilisateur
         //
         aLaLigne = false;
-        System.out.println(tabPrefUtilisateur.size());
         if(tabPrefUtilisateur.size()>0){
-            System.out.println("ici");
             newMessage="L'utilisateur";
              for (int i=0;i<tabPrefUtilisateur.size();i++){
                 if(tabPrefUtilisateur.get(i).equals("Fumeur")){
@@ -198,7 +191,6 @@ public class Discussion {
                         newMessage+=  " indique qu'il est Fumeur";
                         //Random pour savoir si il accepte de voyager avec un coducteur qui ne fume pas
                         int rndAccepte = negociationPrix(0,10);
-                        System.out.println(rndAccepte);
                         //Accepte de voyager
                         if (rndAccepte > 4){
                             newMessage+=  " et accepte de voyager dans un voyage non fumeur";
@@ -398,7 +390,7 @@ public class Discussion {
                 }
             }
             compteur++;
-            if (compteur==20){
+            if (compteur==10){
                 newMessage="Conducteur abandonne car négociation trop longue";
                 discussionFini = true;
             }
