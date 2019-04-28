@@ -1,0 +1,6 @@
+75#Paris#Lyon#2019-05-14#true#
+L'utilisateur souhaite voyager;
+Le conducteur demande si l'utilisateur n'a pas de preference pour son voyage ;
+L'utilisateur propose 53€;
+Conducteur propose 62€;
+Utilisateur ok pour 62€;

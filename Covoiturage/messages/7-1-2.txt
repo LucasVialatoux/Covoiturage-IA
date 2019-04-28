@@ -1,0 +1,11 @@
+75#Paris#Lyon#2019-05-14#true#
+L'utilisateur souhaite voyager;
+Le conducteur demande si l'utilisateur n'a pas de preference pour son voyage ;
+L'utilisateur demande au conducteur si il accepte les enfants,
+ demande au conducteur si il accepte les animaux,
+ indique qu'il est Fumeur et accepte de voyager dans un voyage non fumeur;
+Le conducteur tolère les enfants,
+ tolère les animaux;
+L'utilisateur propose 34€;
+Conducteur propose 66€;
+Utilisateur ok pour 66€;
